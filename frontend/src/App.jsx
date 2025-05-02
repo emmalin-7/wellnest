@@ -2,8 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import React from 'react';
 
-import AuthTest from './authtest';
-import AuthScreen from './authscreen';
+import AuthTest from '../src/authtest';
+import AuthScreen from '../src/authscreen';
 
 function App() {
   return (
@@ -14,3 +14,5 @@ function App() {
 }
 
 export default App;
+
+
