@@ -6,7 +6,7 @@ const router = express.Router();
 // temporary hard code just for testing reasons. WILL NOT BE LIKE THIS IN FINAL APP
 const hardcodedUser = {
   username: 'admin',
-  password: 'pass123',
+  password: 'password',
 };
 
 
