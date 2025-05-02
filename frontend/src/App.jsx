@@ -2,12 +2,15 @@ import { useState } from 'react';
 import './App.css';
 import React from 'react';
 
+import AuthTest from './authtest';
+import AuthScreen from './authscreen';
+
 function App() {
   return (
-    <>
-      <t>This is our Front End -hillary</t>
-    </>
-  )
+    <div>
+      <AuthScreen />
+    </div>
+  );
 }
 
-export default App
+export default App;
