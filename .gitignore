@@ -7,7 +7,7 @@ backend/node_modules/
 .env
 
 # Ignore frontend build output (if using Vite)
-frontend/dist/
+dist/
 
 # Ignore system files and logs
 *.log
