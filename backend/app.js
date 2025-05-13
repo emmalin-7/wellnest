@@ -47,7 +47,7 @@ app.post('/register', (req, res) => {
 
 // controller
 app.get('/', (req, res) => {
-  res.send('backend still working!');
+  res.send('backend still working! this is elaine checking commits');
 });
 
 app.listen(5001, () => {
