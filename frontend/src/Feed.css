@@ -1,0 +1,39 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: white;
+  font-family: sans-serif;
+  overflow-y: auto; 
+}
+
+.topnav {
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+}
+
+.left-links,
+.right-link {
+  display: flex;
+  align-items: center;
+}
+
+.topnav a {
+  color: white;
+  text-decoration: none;
+  padding: 16px;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #575757;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}

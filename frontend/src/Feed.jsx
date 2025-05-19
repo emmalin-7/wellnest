@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Leaderboard.css';
+import './Feed.css';
 import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 
-function Leaderboard() {
+function Feed() {
 
   return (
     <>
@@ -19,10 +19,10 @@ function Leaderboard() {
         </div>
       </div>
 
-      this is leaderboard!
+      this is feed!
 
     </>
   );
 }
 
-export default Leaderboard;
+export default Feed;

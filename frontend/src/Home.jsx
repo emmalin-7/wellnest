@@ -98,11 +98,11 @@ function Home() {
       {/* nav bar */}
       <div className="topnav">
         <div className="left-links">
-          <Link to="/home">Feed</Link>
-          <Link to="/home">Leaderboards</Link>
+          <Link to="/feed">Feed</Link>
+          <Link to="/leaderboard">Leaderboards</Link>
         </div>
         <div className="right-link">
-          <Link to="/profile">Profile</Link>
+          <Link to="/home">Profile</Link>
         </div>
       </div>
 
