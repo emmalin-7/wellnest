@@ -10,21 +10,32 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     axios.post('http://localhost:5001/login', { email, password })
       .then(result => {
-        console.log(result);
-        if (result.data === "Success") {
-          navigate('/Home');
+        console.log('Login response:', result.data);
+
+        if (result.data.message === "Success") {
+          // store each user for local database, dream and sleep logs
+          localStorage.setItem('userEmail', result.data.user.email);
+
+          // go to dashboard
+          navigate('/home');
+        } else {
+          alert(result.data.message);
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.error('Login error:', err);
+        alert('An error occurred during login.');
+      });
   };
 
   return (
     <div className="login-background">
       <div className="stars" />
       <div className="login-card">
-        <h3>🌙 Welcome to Wellnest! </h3>
+        <h3>🌙 Welcome to Wellnest!</h3>
         <form onSubmit={handleSubmit}>
           <label htmlFor="email"><strong>Email</strong></label>
           <input

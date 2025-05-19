@@ -21,6 +21,8 @@ function Home() {
   const [dreamText, setDreamText] = useState('');
   const [dreams, setDreams] = useState([]);
 
+  const userEmail = localStorage.getItem('userEmail');
+  console.log('User email:', userEmail);
   const today = new Date().toISOString().slice(0, 10);
 
   // logging sleep hours, NOT YET COMPLETE
@@ -44,13 +46,13 @@ function Home() {
       const res = await axios.post('/api/dreams', {
         date: today,
         content: dreamText,
+        user: userEmail
       });
-      // log successful 
       console.log('Dream posted:', res.data);
+
       setDreamText('');
       fetchDreams();
     } catch (err) {
-      // log error 
       console.error('Failed to post dream:', err);
     }
   };
@@ -62,7 +64,9 @@ function Home() {
 
   const fetchDreams = async () => {
     try {
-      const res = await axios.get('/api/dreams');
+      const res = await axios.get('/api/dreams', {
+        params: { user: userEmail }
+      });
       setDreams(res.data);
     } catch (err) {
       console.error('Failed to get dreams:', err);

@@ -2,11 +2,12 @@
 // date should autosave
 // content is whatever user types
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const DreamSchema = new mongoose.Schema({
   date: { type: String, required: true },
-  content: { type: String, required: true }
+  content: { type: String, required: true },
+  user: { type: String, required: true }
 });
 
-module.exports = mongoose.model('DreamEntry', DreamSchema);
+export default mongoose.model('DreamEntry', DreamSchema);

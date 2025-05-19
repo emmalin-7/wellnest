@@ -12,7 +12,8 @@ import mongoosePkg from 'mongoose';
 const { Schema, model } = mongoosePkg;
 const DreamEntry = model('DreamEntry', new Schema({
   date: { type: String, required: true },
-  content: { type: String, required: true }
+  content: { type: String, required: true },
+  user: { type: String, required: true }
 }));
 
 // connect to .env
@@ -36,19 +37,24 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+
   UserModel.findOne({ email })
     .then(account => {
       if (account) {
         if (account.password === password) {
-          res.json("Success");
+          // changed to store the email 
+          res.json({ message: "Success", user: { email: account.email } });
         } else {
-          res.json("Incorrect password");
+          res.json({ message: "Incorrect password" });
         }
       } else {
-        res.json("User does not exist");
+        res.json({ message: "User does not exist" });
       }
     })
-    .catch(err => res.status(500).json("Server error"));
+    .catch(err => {
+      console.error("Login error:", err);
+      res.status(500).json({ message: "Server error" });
+    });
 });
 
 app.post('/register', (req, res) => {
@@ -63,16 +69,20 @@ app.post('/register', (req, res) => {
 
 app.post('/api/dreams', async (req, res) => {
   try {
-    const { date, content } = req.body;
+    const { date, content, user } = req.body;
+
+    if (!user) {
+      return res.status(400).json({ error: 'missing user' });
+    }
 
     // logging incoming dreams
     console.log('Received dream post:', req.body);
 
-    const newDream = new DreamEntry({ date, content });
+    const newDream = new DreamEntry({ date, content, user });
     await newDream.save();
 
     // log if saved
-    console.log('Saved to database:', newDream);
+    console.log(' Saved to database:', newDream);
     res.status(201).json(newDream);
   } catch (err) {
     console.error('Save failed:', err);
@@ -80,16 +90,22 @@ app.post('/api/dreams', async (req, res) => {
   }
 });
 
+
 app.get('/api/dreams', async (req, res) => {
   try {
-    const dreams = await DreamEntry.find().sort({ date: -1 });
+    const { user } = req.query;
+
+    if (!user) {
+      return res.status(400).json({ error: 'Missing user in query string' });
+    }
+
+    const dreams = await DreamEntry.find({ user }).sort({ date: -1 });
     res.json(dreams);
   } catch (err) {
-    console.error('Failed to fetch dream', err);
+    console.error('Failed to fetch dreams:', err);
     res.status(500).json({ error: 'failed to fetch dream' });
   }
 });
-
 
 // backend run check
 
