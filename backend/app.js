@@ -13,7 +13,9 @@ const { Schema, model } = mongoosePkg;
 const DreamEntry = model('DreamEntry', new Schema({
   date: { type: String, required: true },
   content: { type: String, required: true },
-  user: { type: String, required: true }
+  user: { type: String, required: true },
+  // for public and private posts
+  isPublic: { type: Boolean, default: false }
 }));
 
 // connect to .env
@@ -69,7 +71,7 @@ app.post('/register', (req, res) => {
 
 app.post('/api/dreams', async (req, res) => {
   try {
-    const { date, content, user } = req.body;
+    const { date, content, user, isPublic } = req.body;
 
     if (!user) {
       return res.status(400).json({ error: 'missing user' });
@@ -78,7 +80,7 @@ app.post('/api/dreams', async (req, res) => {
     // logging incoming dreams
     console.log('Received dream post:', req.body);
 
-    const newDream = new DreamEntry({ date, content, user });
+    const newDream = new DreamEntry({ date, content, user, isPublic: !!isPublic });
     await newDream.save();
 
     // log if saved
@@ -95,15 +97,14 @@ app.get('/api/dreams', async (req, res) => {
   try {
     const { user } = req.query;
 
-    if (!user) {
-      return res.status(400).json({ error: 'Missing user in query string' });
-    }
+    // check for feed or dashboard
+    const filter = user ? { user } : {};
 
-    const dreams = await DreamEntry.find({ user }).sort({ date: -1 });
+    const dreams = await DreamEntry.find(filter).sort({ date: -1 });
     res.json(dreams);
   } catch (err) {
     console.error('Failed to fetch dreams:', err);
-    res.status(500).json({ error: 'failed to fetch dream' });
+    res.status(500).json({ error: 'failed to fetch dreams' });
   }
 });
 

@@ -37,3 +37,25 @@ html, body {
   background-color: #04AA6D;
   color: white;
 }
+
+.feed-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.dream-post {
+  background: #fdfdfd;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 8px;
+}

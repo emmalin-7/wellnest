@@ -25,13 +25,16 @@ function Home() {
   console.log('User email:', userEmail);
   const today = new Date().toISOString().slice(0, 10);
 
+  const [isPublic, setIsPublic] = useState(false);
+
+
   // logging sleep hours, NOT YET COMPLETE
   const logSleep = async (e) => {
     e.preventDefault();
     if (!sleepHours) return;
 
     // date set to current date for now so it auto updates, we can change this later
-    await axios.post('/api/sleep', { date: today, hours: Number(sleepHours) });
+    await axios.post('/api/sleep', { date: today, hours: Number(sleepHours), user: userEmail });
 
     setSleepHours('');
     fetchSleepData();
@@ -43,10 +46,13 @@ function Home() {
     if (!dreamText) return;
 
     try {
+      console.log('Posting dream:', { date: today, content: dreamText, user: userEmail, isPublic });
+
       const res = await axios.post('/api/dreams', {
         date: today,
         content: dreamText,
-        user: userEmail
+        user: userEmail,
+        isPublic
       });
       console.log('Dream posted:', res.data);
 
@@ -58,7 +64,10 @@ function Home() {
   };
 
   const fetchSleepData = async () => {
-    const res = await axios.get('/api/sleep');
+    const res = await axios.get('/api/sleep', {
+      params: { user: userEmail }
+    });
+    console.log('Fetched sleep data:', res.data);
     setSleepData(res.data.reverse());
   };
 
@@ -149,6 +158,14 @@ function Home() {
               onChange={(e) => setDreamText(e.target.value)}
               placeholder="Write about your dream..."
             />
+            <label className="public-checkbox">
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              Share to Feed
+            </label>
             <button onClick={submitDream}>post dream</button>
           </div>
 
