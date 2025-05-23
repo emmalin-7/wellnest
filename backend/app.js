@@ -95,10 +95,14 @@ app.post('/api/dreams', async (req, res) => {
 
 app.get('/api/dreams', async (req, res) => {
   try {
-    const { user } = req.query;
+    const { user , search } = req.query;
 
-    // check for feed or dashboard
-    const filter = user ? { user } : {};
+    // Build dynamic filter
+    const filter = {};
+    if (user) filter.user = user;
+    if (search) {
+      filter.content = { $regex: new RegExp(search, 'i') }; // Case-insensitive content match
+    }
 
     const dreams = await DreamEntry.find(filter).sort({ date: -1 });
     res.json(dreams);

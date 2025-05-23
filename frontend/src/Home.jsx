@@ -20,6 +20,7 @@ function Home() {
   const [sleepData, setSleepData] = useState([]);
   const [dreamText, setDreamText] = useState('');
   const [dreams, setDreams] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const userEmail = localStorage.getItem('userEmail');
   console.log('User email:', userEmail);
@@ -71,10 +72,10 @@ function Home() {
     setSleepData(res.data.reverse());
   };
 
-  const fetchDreams = async () => {
+  const fetchDreams = async (search = '') => {
     try {
       const res = await axios.get('/api/dreams', {
-        params: { user: userEmail }
+        params: { user: userEmail, search }
       });
       setDreams(res.data);
     } catch (err) {
@@ -146,6 +147,17 @@ function Home() {
           {/* sleep chart display */}
           <div className="card chart-card">
             <Bar data={chartData} />
+          </div>
+
+          {/* search bar */}
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search dreams..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button onClick={() => fetchDreams(searchTerm)}>Search</button>
           </div>
 
           {/* THIS SECTION BELOW IS DREAM LOGGING. this works BUT i cannot delete logs yet, additionally, it only displays on dashboard for now, not the feed yet */}
