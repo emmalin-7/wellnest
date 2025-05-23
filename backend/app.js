@@ -95,11 +95,12 @@ app.post('/api/dreams', async (req, res) => {
 
 app.get('/api/dreams', async (req, res) => {
   try {
-    const { user , search } = req.query;
+    const { user , search, isPublic } = req.query;
 
     // Build dynamic filter
     const filter = {};
     if (user) filter.user = user;
+    if (isPublic === 'true') filter.isPublic = true;
     if (search) {
       filter.content = { $regex: new RegExp(search, 'i') }; // Case-insensitive content match
     }

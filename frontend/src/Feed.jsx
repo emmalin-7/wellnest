@@ -6,20 +6,28 @@ import { Link } from 'react-router-dom';
 
 function Feed() {
   const [dreams, setDreams] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchPublicDreams = async () => {
-      try {
-        const res = await axios.get('/api/dreams');
-        // if dream is marked as public, it will go on feed, otherwise, just profile
-        const publicDreams = res.data.filter(d => d.isPublic);
-        setDreams(publicDreams);
+  const fetchPublicDreams = async (search = '') => {
+    try {
+      const res = await axios.get('/api/dreams', {
+        params: {
+          isPublic: true,
+          search
+        }
+      });
+
+      // if dream is marked as public, it will go on feed, otherwise, just profile
+      // const publicDreams = res.data.filter(d => d.isPublic);
+      
+      setDreams(res.data);
       } catch (err) {
         console.error('Failed to load dreams:', err);
         setDreams([]);
       }
     };
 
+  useEffect(() => {
     fetchPublicDreams();
   }, []);
 
@@ -35,6 +43,17 @@ function Feed() {
         <div className="right-link">
           <Link to="/home">Profile</Link>
         </div>
+      </div>
+
+      {/* nav bar */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search public dreams..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        <button onClick={() => fetchPublicDreams(searchTerm)}>Search</button>
       </div>
 
       <div className="feed-container">
