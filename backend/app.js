@@ -6,17 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import UserModel from './models/users.js';
-
-// creating dreamentry for the dream log 
-import mongoosePkg from 'mongoose';
-const { Schema, model } = mongoosePkg;
-const DreamEntry = model('DreamEntry', new Schema({
-  date: { type: String, required: true },
-  content: { type: String, required: true },
-  user: { type: String, required: true },
-  // for public and private posts
-  isPublic: { type: Boolean, default: false }
-}));
+import DreamEntry from './models/dreams.js';
 
 // connect to .env
 const __filename = fileURLToPath(import.meta.url);
@@ -104,7 +94,7 @@ app.get('/api/dreams', async (req, res) => {
       filter.content = { $regex: new RegExp(search, 'i') }; // Case-insensitive content match
     }
 
-    const dreams = await DreamEntry.find(filter).sort({ date: -1 });
+    const dreams = await DreamEntry.find(filter).sort({ date: -1, created: -1 });
     res.json(dreams);
   } catch (err) {
     console.error('Failed to fetch dreams:', err);

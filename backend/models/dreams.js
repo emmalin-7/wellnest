@@ -8,7 +8,8 @@ const DreamSchema = new mongoose.Schema({
   date: { type: String, required: true },
   content: { type: String, required: true },
   user: { type: String, required: true },
-  isPublic: { type: Boolean, default: false }
+  isPublic: { type: Boolean, default: false },
+  created: { type: Date, default: Date.now }
 });
 
 export default mongoose.model('DreamEntry', DreamSchema);
