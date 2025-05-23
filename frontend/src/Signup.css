@@ -1,73 +1,139 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: Tahoma, sans-serif;
-    background: #0d1b2a;
-    overflow: hidden;
+@font-face {
+  font-family: "Cooper Lt BT";
+  src: url("/fonts/CooperLtBT.ttf") format("truetype");
 }
 
-.login-background {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    width: 100vw;
-    background-color: #0d1b2a;
-    position: relative;
-    overflow: hidden;
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #FAF9F7;
 }
 
-.login-card {
-    z-index: 1;
-    background-color: #ffffffee;
-    padding: 2.5rem 3rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 400px;
-    position: relative;
+.signup-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 500px;
+  max-width: 40vw;
 }
 
-.login-card h2 {
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
+.logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 1rem;
 }
 
-.login-card form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.tagline {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 500px;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
 }
 
-.login-card input {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  width: 100%;
 }
 
-.login-card button {
-    padding: 0.75rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    background-color: #4ca1af;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
 }
 
-.login-card button:hover {
-    background-color: #357f89;
+.form-group label {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.error {
-    color: #e74c3c;
-    margin-top: 1rem;
+.signup-card .form-group input {
+  border-radius: 999px;
+  border: 2px solid #6696D4;
+  background: #FAF9F7 !important;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px;
+  font-family: "Cooper Lt BT";
+}
+
+.signup-card .form-group input::placeholder {
+  font-family: "Cooper Lt BT";
+  color: #666;
+}
+
+.signup-card button {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 20px;
+  background: #B5D0F3 !important;
+  border: none;
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  height: 40px;
+  transition: background-color 0.3s ease;
+}
+
+.signup-card button:hover {
+  background: #8EB4EC !important;
 }
 
 .signup-link {
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+.signup-link span {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.signup-link a {
+  color: #4370AA;
+  font-family: "Cooper Lt BT";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  margin-left: 0.5rem;
 }

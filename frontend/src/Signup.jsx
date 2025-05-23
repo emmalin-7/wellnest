@@ -20,45 +20,54 @@ function Signup() {
   };
 
   return (
-    <div className="login-background">
-      <div className="login-card">
-        <h3>🌙 Join Wellnest today!</h3>
+    <div className="signup-container">
+      <div className="signup-card">
+        <img src="/Wellnest-Logo.svg" alt="Wellnest Logo" className="logo" />
+        <p className="tagline">Log Your Sleep & Dreams, Connect with Friends.</p>
+        
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name"><strong>Name</strong></label>
-          <input
-            type="text"
-            placeholder="Enter Name"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-          <label htmlFor="email"><strong>Email</strong></label>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              placeholder="Enter Email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          <label htmlFor="password"><strong>Password</strong></label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
           <button type="submit">Register</button>
         </form>
+        
         <p className="signup-link">
-          ⭐️ Already have an account?{' '}     
-          <Link to="/login">Log in</Link>
+          <span>Already have an account?</span>
+          <Link to="/login">Log in!</Link>
         </p>
       </div>
     </div>

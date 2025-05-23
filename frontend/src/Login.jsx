@@ -32,34 +32,42 @@ function Login() {
   };
 
   return (
-    <div className="login-background">
-      <div className="stars" />
+    <div className="login-container">
       <div className="login-card">
-        <h3>🌙 Welcome to Wellnest!</h3>
+        <img src="/Wellnest-Logo.svg" alt="Wellnest Logo" className="logo" />
+        <p className="tagline">Welcome back to Wellnest!</p>
+        
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email"><strong>Email</strong></label>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            autoComplete="off"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <label htmlFor="password"><strong>Password</strong></label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              placeholder="Enter Email"
+              autoComplete="off"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
           <button type="submit">Login</button>
         </form>
-        <p className="signup-link"> 
-          ⭐️ Don't have an account?{' '}
+        
+        <p className="signup-link">
+          <span>Don't have an account?</span>
           <Link to="/register">Join us!</Link>
         </p>
       </div>
