@@ -6,17 +6,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import UserModel from './models/users.js';
-
+import DreamEntry from './models/dreams.js';
 // creating dreamentry for the dream log 
 import mongoosePkg from 'mongoose';
 const { Schema, model } = mongoosePkg;
-const DreamEntry = model('DreamEntry', new Schema({
-  date: { type: String, required: true },
-  content: { type: String, required: true },
-  user: { type: String, required: true },
-  // for public and private posts
-  isPublic: { type: Boolean, default: false }
-}));
 
 // connect to .env
 const __filename = fileURLToPath(import.meta.url);
@@ -91,6 +84,33 @@ app.post('/api/dreams', async (req, res) => {
     res.status(500).json({ error: 'dream was not saved' });
   }
 });
+
+app.post('/api/sleep', async (req, res) => {
+  try {
+    const { date, hours, user } = req.body;
+
+    if (!user) {
+      return res.status(400).json({ error: 'missing user' });
+    }
+
+    console.log('Received sleep post:', req.body);
+
+    let dream = await DreamEntry.findOne({ date, user})
+    if (!dream) {
+      console.log("dream not found");
+      dream = new DreamEntry({ date, user, hours});
+    }
+
+    dream.hours = hours
+    console.log("dream:",dream);
+    await dream.save();
+
+    res.status(200).json(dream)
+  } catch (err) {
+    console.error('Save failed:', err);
+    res.status(500).json({ error: 'dream was not saved' });
+  }
+})
 
 
 app.get('/api/dreams', async (req, res) => {
