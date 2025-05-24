@@ -16,7 +16,8 @@ const DreamEntry = model('DreamEntry', new Schema({
   user: { type: String, required: true },
   // for public and private posts
   isPublic: { type: Boolean, default: false },
-  hours: { type: Number, required: false }
+  hours: { type: Number, required: false },
+  created: { type: Date, default: Date.now }
 }));
 
 // connect to .env

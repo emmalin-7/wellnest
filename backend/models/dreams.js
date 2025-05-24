@@ -9,7 +9,7 @@ const DreamSchema = new mongoose.Schema({
   content: { type: String, required: true },
   user: { type: String, required: true },
   isPublic: { type: Boolean, default: false },
-  hours: { type: Number, required: false }
+  hours: { type: Number, required: false },
   created: { type: Date, default: Date.now }
 });
 
