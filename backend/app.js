@@ -6,7 +6,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import UserModel from './models/users.js';
-import DreamEntry from './models/dreams.js';
+
+// creating dreamentry for the dream log 
+import mongoosePkg from 'mongoose';
+const { Schema, model } = mongoosePkg;
+const DreamEntry = model('DreamEntry', new Schema({
+  date: { type: String, required: true },
+  content: { type: String, required: true },
+  user: { type: String, required: true },
+  // for public and private posts
+  isPublic: { type: Boolean, default: false },
+  hours: { type: Number, required: false }
+}));
 
 // connect to .env
 const __filename = fileURLToPath(import.meta.url);
@@ -61,20 +72,24 @@ app.post('/register', (req, res) => {
 
 app.post('/api/dreams', async (req, res) => {
   try {
-    const { date, content, user, isPublic } = req.body;
+    const { date, content, user, isPublic, hours } = req.body;
 
     if (!user) {
       return res.status(400).json({ error: 'missing user' });
     }
 
-    // logging incoming dreams
     console.log('Received dream post:', req.body);
 
-    const newDream = new DreamEntry({ date, content, user, isPublic: !!isPublic });
-    await newDream.save();
+    const newDream = new DreamEntry({
+      date,
+      content,
+      user,
+      isPublic: !!isPublic,
+      hours: hours !== undefined ? Number(hours) : undefined
+    });
 
-    // log if saved
-    console.log(' Saved to database:', newDream);
+    await newDream.save();
+    console.log('Saved to database:', newDream);
     res.status(201).json(newDream);
   } catch (err) {
     console.error('Save failed:', err);
@@ -85,13 +100,14 @@ app.post('/api/dreams', async (req, res) => {
 
 app.get('/api/dreams', async (req, res) => {
   try {
-    const { user , search } = req.query;
+    const { user , search, isPublic } = req.query;
 
-    // Build dynamic filter
+    // filter users and public/private
     const filter = {};
     if (user) filter.user = user;
+    if (isPublic === 'true') filter.isPublic = true;
     if (search) {
-      filter.content = { $regex: new RegExp(search, 'i') }; // Case-insensitive content match
+      filter.content = { $regex: new RegExp(search, 'i') }; 
     }
 
     const dreams = await DreamEntry.find(filter).sort({ date: -1, created: -1 });
@@ -101,6 +117,50 @@ app.get('/api/dreams', async (req, res) => {
     res.status(500).json({ error: 'failed to fetch dreams' });
   }
 });
+
+
+// leaderboard
+
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const today = new Date();
+    const weekAgo = new Date();
+    weekAgo.setDate(today.getDate() - 6);
+    const weekAgoStr = weekAgo.toISOString().slice(0, 10);
+
+    // checking last 7 days
+    const recentCount = await DreamEntry.countDocuments({
+      date: { $gte: weekAgoStr },
+      hours: { $gt: 0 }
+    });
+
+    // otherwise all-time
+    const matchCondition = recentCount >= 10
+      ? { date: { $gte: weekAgoStr }, hours: { $gt: 0 } }
+      : { hours: { $gt: 0 } };
+
+    const leaderboardData = await DreamEntry.aggregate([
+      { $match: matchCondition },
+      {
+        $group: {
+          _id: "$user",
+          totalHours: { $sum: "$hours" }
+        }
+      },
+      { $sort: { totalHours: -1 } }
+    ]);
+
+    const top10 = leaderboardData.slice(0, 10);
+    const bottom10 = leaderboardData.slice(-10).reverse();
+
+    res.json({ top10, bottom10, fallback: recentCount < 10 });
+
+  } catch (err) {
+    console.error("Leaderboard route error:", err);
+    res.status(500).json({ error: "Leaderboard route failed" });
+  }
+});
+
 
 // backend run check
 

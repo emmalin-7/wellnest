@@ -29,12 +29,12 @@ function Home() {
   const [isPublic, setIsPublic] = useState(false);
 
 
-  // logging sleep hours, NOT YET COMPLETE
+  // logging sleep hours
   const logSleep = async (e) => {
     e.preventDefault();
     if (!sleepHours) return;
 
-    // date set to current date for now so it auto updates, we can change this later
+    // date set to current date for now so it auto updates, we can change this later (final)
     await axios.post('/api/sleep', { date: today, hours: Number(sleepHours), user: userEmail });
 
     setSleepHours('');
@@ -42,34 +42,55 @@ function Home() {
   };
   
   // dealing with the dream submissions 
-  const submitDream = async (e) => {
-    e.preventDefault();
-    if (!dreamText) return;
+const submitDream = async (e) => {
+  e.preventDefault();
+  if (!dreamText || !sleepHours) return;
 
-    try {
-      console.log('Posting dream:', { date: today, content: dreamText, user: userEmail, isPublic });
+  try {
+    console.log('Posting dream:', {
+      date: today,
+      content: dreamText,
+      user: userEmail,
+      isPublic,
+      hours: Number(sleepHours)
+    });
 
-      const res = await axios.post('/api/dreams', {
-        date: today,
-        content: dreamText,
-        user: userEmail,
-        isPublic
-      });
-      console.log('Dream posted:', res.data);
+    const res = await axios.post('/api/dreams', {
+      date: today,
+      content: dreamText,
+      user: userEmail,
+      isPublic,
+      hours: Number(sleepHours)
+    });
 
-      setDreamText('');
-      fetchDreams();
-    } catch (err) {
-      console.error('Failed to post dream:', err);
-    }
-  };
+    console.log('Dream posted:', res.data);
+
+    setDreamText('');
+    setSleepHours('');
+    fetchDreams();
+    fetchSleepData();
+
+  } catch (err) {
+    console.error('Failed to post dream:', err);
+  }
+};
 
   const fetchSleepData = async () => {
-    const res = await axios.get('/api/sleep', {
-      params: { user: userEmail }
-    });
-    console.log('Fetched sleep data:', res.data);
-    setSleepData(res.data.reverse());
+    try {
+      const res = await axios.get('/api/dreams', {
+        params: { user: userEmail }
+      });
+
+      // filter out dreams without valid hours
+      const filtered = res.data.filter(d => typeof d.hours === 'number');
+
+      // sort by date ascending
+      const sorted = filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      setSleepData(sorted);
+    } catch (err) {
+      console.error('Failed to fetch sleep data from dreams:', err);
+    }
   };
 
   const fetchDreams = async (search = '') => {
@@ -89,18 +110,39 @@ function Home() {
     fetchDreams();
   }, []);
 
-  // this chart doesn't work yet cuz we can't really enter sleep hours
-  const chartData = {
-    labels: sleepData.map((e) =>
-      new Date(e.date).toLocaleDateString('en-US', { weekday: 'short' })
-    ),
-    datasets: [
-      {
-        label: 'Hours Slept',
-        data: sleepData.map((e) => e.hours),
-        backgroundColor: '#04AA6D',
-      },
-    ],
+  // this chart works!
+const chartData = {
+  labels: sleepData.map((e) => {
+    const [year, month, day] = e.date.split('-');
+    const localDate = new Date(Number(year), Number(month) - 1, Number(day));
+    return localDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+  }),
+  datasets: [
+    {
+      label: 'Hours Slept',
+      data: sleepData.map((e) => e.hours),
+      backgroundColor: '#04AA6D',
+    },
+  ],
+};
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Sleep Hours by Date' }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Date' } },
+      y: {
+        title: { display: true, text: 'Hours Slept' },
+        beginAtZero: true,
+        max: 24
+      }
+    }
   };
 
   return (
@@ -121,9 +163,6 @@ function Home() {
         <div className="dashboard-header">
           <div className="date-section">
             <span className="date-label">{today}</span>
-            <a href="#" className="change-link" onClick={(e) => e.preventDefault()}>
-              change
-            </a>
           </div>
           <div className="profile-icon">👤</div>
         </div>
@@ -132,21 +171,9 @@ function Home() {
 
           {/* THIS SECTION BELOW IS SLEEP LOGGING, BUT SLEEP LOGGING DOES NOT WORK YET.*/}
 
-          {/* sleep logging */}
-          <div className="card time-card">
-            <div className="card-title">Log Sleep</div>
-            <input
-              type="number"
-              placeholder="Enter hours slept"
-              value={sleepHours}
-              onChange={(e) => setSleepHours(e.target.value)}
-            />
-            <button onClick={logSleep}>✎</button>
-          </div>
-
           {/* sleep chart display */}
           <div className="card chart-card">
-            <Bar data={chartData} />
+            <Bar data={chartData} options={chartOptions} />
           </div>
 
           {/* search bar */}
@@ -163,13 +190,23 @@ function Home() {
           {/* THIS SECTION BELOW IS DREAM LOGGING. this works BUT i cannot delete logs yet, additionally, it only displays on dashboard for now, not the feed yet */}
 
           {/* dream logging */}
-          <div className="card dreams-card">
-            <div className="card-title">🌙 DREAMS</div>
+          <div className="card dreams-card combined-dream-card">
+            <div className="card-title">Today's Sleep Log: </div>
+
+            <input
+              type="number"
+              placeholder="Enter hours slept"
+              value={sleepHours}
+              onChange={(e) => setSleepHours(e.target.value)}
+              className="input-hours"
+            />
+
             <textarea
               value={dreamText}
               onChange={(e) => setDreamText(e.target.value)}
               placeholder="Write about your dream..."
             />
+
             <label className="public-checkbox">
               <input
                 type="checkbox"
@@ -178,7 +215,8 @@ function Home() {
               />
               Share to Feed
             </label>
-            <button onClick={submitDream}>post dream</button>
+
+            <button onClick={submitDream}>Post Dream</button>
           </div>
 
           {/* show dreams (in dashboard only) [i think we can do this same way for the feed?] */}
@@ -187,6 +225,7 @@ function Home() {
               dreams.map((d, i) => (
                 <div key={i} className="dream-entry">
                   <strong>{d?.date || 'No date'}</strong>
+                  {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
                   <p>{d?.content || 'No content'}</p>
                 </div>
               ))
