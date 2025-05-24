@@ -110,7 +110,7 @@ app.get('/api/dreams', async (req, res) => {
       filter.content = { $regex: new RegExp(search, 'i') }; 
     }
 
-    const dreams = await DreamEntry.find(filter).sort({ date: -1 });
+    const dreams = await DreamEntry.find(filter).sort({ date: -1, created: -1 });
     res.json(dreams);
   } catch (err) {
     console.error('Failed to fetch dreams:', err);
