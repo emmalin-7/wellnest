@@ -11,16 +11,20 @@
 .right-link {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-.topnav a {
+.topnav a,
+.logout-link {
   color: white;
   text-decoration: none;
   padding: 16px;
   font-size: 17px;
+  cursor: pointer;
 }
 
-.topnav a:hover {
+.topnav a:hover,
+.logout-link:hover {
   background-color: #575757;
 }
 

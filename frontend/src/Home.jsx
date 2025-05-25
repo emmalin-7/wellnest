@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Home.css';
 import { Bar } from 'react-chartjs-2';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,6 +28,7 @@ function Home() {
 
   const [isPublic, setIsPublic] = useState(false);
 
+  const navigate = useNavigate();
 
   // logging sleep hours
   const logSleep = async (e) => {
@@ -145,6 +146,11 @@ const chartData = {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    navigate('/login');
+  };
+
   return (
     <>
       {/* nav bar */}
@@ -155,6 +161,7 @@ const chartData = {
         </div>
         <div className="right-link">
           <Link to="/home">Profile</Link>
+          <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>
       </div>
 
