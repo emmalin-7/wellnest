@@ -183,17 +183,6 @@ const chartData = {
             <Bar data={chartData} options={chartOptions} />
           </div>
 
-          {/* search bar */}
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search dreams..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button onClick={() => fetchDreams(searchTerm)}>Search</button>
-          </div>
-
           {/* THIS SECTION BELOW IS DREAM LOGGING. this works BUT i cannot delete logs yet, additionally, it only displays on dashboard for now, not the feed yet */}
 
           {/* dream logging */}
@@ -224,6 +213,22 @@ const chartData = {
             </label>
 
             <button onClick={submitDream}>Post Dream</button>
+          </div>
+
+          {/* search bar */}
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search dreams..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key == 'Enter') {
+                  fetchDreams(searchTerm);
+                }
+              }}
+              />
+              <button onClick={() => fetchDreams(searchTerm)}>Search</button>
           </div>
 
           {/* show dreams (in dashboard only) [i think we can do this same way for the feed?] */}

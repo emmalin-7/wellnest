@@ -52,6 +52,11 @@ function Feed() {
           placeholder="Search public dreams..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              fetchPublicDreams(searchTerm);
+            }
+          }}
           />
         <button onClick={() => fetchPublicDreams(searchTerm)}>Search</button>
       </div>
