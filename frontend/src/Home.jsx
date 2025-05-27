@@ -262,7 +262,7 @@ const chartData = {
             {searchMode === 'hours' && (
             <input
               type="number"
-              placeholder="Filter by hours"
+              placeholder="Search by hours"
               value={sleepSearch}
               onChange={(e) => setSleepSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}

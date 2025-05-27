@@ -59,3 +59,19 @@ html, body {
   color: #444;
   margin-bottom: 8px;
 }
+
+.search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  margin-left: 0.7rem;
+  font-weight: 500;
+}
+
+.search-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
