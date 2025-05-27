@@ -42,13 +42,14 @@ function Leaderboard() {
         </div>
       </div>
 
-      {/* toggle view for the different leaderboards */}
-      <div className="search-bar">
-        <button onClick={() => setView('top')}>Top 10</button>
-        <button onClick={() => setView('bottom')}>Bottom 10</button>
-      </div>
-
       <div className="feed-container">
+        <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Sleep Leaderboard</h1>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+          <button onClick={() => setView('top')}>Top 10</button>
+          <button onClick={() => setView('bottom')}>Bottom 10</button>
+        </div>
+
         <h2>{title}</h2>
         {fallback && (
           <p style={{ fontStyle: 'italic', color: '#888' }}>
