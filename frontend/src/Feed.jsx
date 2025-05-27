@@ -7,18 +7,22 @@ import { Link } from 'react-router-dom';
 function Feed() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchMode, setSearchMode] = useState('content');
+  const [hourSearch, setHourSearch] = useState('');
 
-  const fetchPublicDreams = async (search = '') => {
+
+  const fetchPublicDreams = async () => {
     try {
-      const res = await axios.get('/api/dreams', {
-        params: {
-          isPublic: true,
-          search
-        }
-      });
+    const params = { isPublic: true };
 
-      // if dream is marked as public, it will go on feed, otherwise, just profile
-      // const publicDreams = res.data.filter(d => d.isPublic);
+    if (searchMode === 'content' && searchTerm.trim()) {
+      params.search = searchTerm;
+    }
+    if (searchMode === 'hours' && hourSearch.trim()) {
+      params.hours = hourSearch;
+    }
+
+    const res = await axios.get('/api/dreams', { params });
       
       setDreams(res.data);
       } catch (err) {
@@ -45,20 +49,51 @@ function Feed() {
         </div>
       </div>
 
-      {/* nav bar */}
+      {/* search mode toggle bar */}
+      <div className="search-toggle">
+      <span>Search by:</span>
+      <label className="search-option">
+        <input
+          type="radio"
+          value="content"
+          checked={searchMode === 'content'}
+          onChange={() => setSearchMode('content')}
+        />
+        <span>Content</span>
+      </label>
+      <label className="search-option">
+        <input
+          type="radio"
+          value="hours"
+          checked={searchMode === 'hours'}
+          onChange={() => setSearchMode('hours')}
+        />
+        <span>Hours</span>
+      </label>
+    </div>
+
+
+      {/* search bar */}
       <div className="search-bar">
+        {searchMode === 'content' && (
         <input
           type="text"
           placeholder="Search public dreams..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              fetchPublicDreams(searchTerm);
-            }
-          }}
-          />
-        <button onClick={() => fetchPublicDreams(searchTerm)}>Search</button>
+          onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+         />
+        )}
+        {searchMode === 'hours' && (
+        <input
+          type="number"
+          placeholder="Search by hours"
+          value={hourSearch}
+          onChange={(e) => setHourSearch(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+        />
+        )}
+        <button onClick={fetchPublicDreams}>Search</button>
       </div>
 
       <div className="feed-container">
@@ -70,6 +105,9 @@ function Feed() {
                 <strong>{dream.user}</strong>
                 <span>{dream.date}</span>
               </div>
+              {dream.hours != null && (
+                <p><em>{dream.hours} hours of sleep</em></p>
+              )}
               <p>{dream.content}</p>
             </div>
           ))
