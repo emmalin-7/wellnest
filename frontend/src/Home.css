@@ -192,3 +192,16 @@ button:hover {
 .search-bar input[type="text"] {
   flex: 1;
 }
+
+.search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+}
+
+.search-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}

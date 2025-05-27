@@ -21,6 +21,8 @@ function Home() {
   const [dreamText, setDreamText] = useState('');
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sleepSearch, setSleepSearch] = useState('');
+  const [searchMode, setSearchMode] = useState('content'); // toggle between search types
 
   const userEmail = localStorage.getItem('userEmail');
   console.log('User email:', userEmail);
@@ -94,11 +96,19 @@ const submitDream = async (e) => {
     }
   };
 
-  const fetchDreams = async (search = '') => {
+  const fetchDreams = async () => {
     try {
-      const res = await axios.get('/api/dreams', {
-        params: { user: userEmail, search }
-      });
+    const params = { user: userEmail };
+
+    // Only add relevant search param
+    if (searchMode === 'content' && searchTerm.trim()) {
+      params.search = searchTerm;
+    }
+    if (searchMode === 'hours' && sleepSearch.trim()) {
+      params.hours = sleepSearch;
+    }
+
+    const res = await axios.get('/api/dreams', { params });
       setDreams(res.data);
     } catch (err) {
       console.error('Failed to get dreams:', err);
@@ -215,20 +225,50 @@ const chartData = {
             <button onClick={submitDream}>Post Dream</button>
           </div>
 
+        {/* search mode toggle */}
+        <div className="search-toggle">
+          <span>Search by:</span> 
+          <label className="search-option">
+            <input
+              type="radio"
+              value="content"
+              checked={searchMode === 'content'}
+              onChange={() => setSearchMode('content')}
+            />
+            <span>Content</span>
+          </label>
+          <label className="search-option">
+            <input
+              type="radio"
+              value="hours"
+              checked={searchMode === 'hours'}
+              onChange={() => setSearchMode('hours')}
+            />
+            <span>Hours</span>
+          </label>
+        </div>
+
           {/* search bar */}
           <div className="search-bar">
+            {searchMode === 'content' && (
             <input
               type="text"
               placeholder="Search dreams..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key == 'Enter') {
-                  fetchDreams(searchTerm);
-                }
-              }}
+              onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
               />
-              <button onClick={() => fetchDreams(searchTerm)}>Search</button>
+              )}
+            {searchMode === 'hours' && (
+            <input
+              type="number"
+              placeholder="Filter by hours"
+              value={sleepSearch}
+              onChange={(e) => setSleepSearch(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+              />
+              )}
+              <button onClick={fetchDreams}>Search</button>
           </div>
 
           {/* show dreams (in dashboard only) [i think we can do this same way for the feed?] */}

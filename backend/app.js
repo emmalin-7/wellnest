@@ -101,7 +101,7 @@ app.post('/api/dreams', async (req, res) => {
 
 app.get('/api/dreams', async (req, res) => {
   try {
-    const { user , search, isPublic } = req.query;
+    const { user , search, isPublic, hours } = req.query;
 
     // filter users and public/private
     const filter = {};
@@ -110,6 +110,7 @@ app.get('/api/dreams', async (req, res) => {
     if (search) {
       filter.content = { $regex: new RegExp(search, 'i') }; 
     }
+    if (hours) filter.hours = Number(hours);
 
     const dreams = await DreamEntry.find(filter).sort({ date: -1, created: -1 });
     res.json(dreams);
