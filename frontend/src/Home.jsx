@@ -24,7 +24,8 @@ function Home() {
   const [sleepSearch, setSleepSearch] = useState('');
   const [searchMode, setSearchMode] = useState('content'); // toggle between search types
 
-  const userEmail = localStorage.getItem('userEmail');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userEmail = user?.email;
   console.log('User email:', userEmail);
   const today = new Date().toISOString().slice(0, 10);
 

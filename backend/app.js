@@ -6,19 +6,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import UserModel from './models/users.js';
+import DreamEntry from './models/dreams.js';
 
 // creating dreamentry for the dream log 
 import mongoosePkg from 'mongoose';
 const { Schema, model } = mongoosePkg;
-const DreamEntry = model('DreamEntry', new Schema({
-  date: { type: String, required: true },
-  content: { type: String, required: true },
-  user: { type: String, required: true },
-  // for public and private posts
-  isPublic: { type: Boolean, default: false },
-  hours: { type: Number, required: false },
-  created: { type: Date, default: Date.now }
-}));
 
 // connect to .env
 const __filename = fileURLToPath(import.meta.url);
@@ -47,7 +39,7 @@ app.post("/login", (req, res) => {
       if (account) {
         if (account.password === password) {
           // changed to store the email 
-          res.json({ message: "Success", user: { email: account.email } });
+          res.json({ message: "Success", user: { email: account.email, id: account._id } });
         } else {
           res.json({ message: "Incorrect password" });
         }
@@ -97,6 +89,29 @@ app.post('/api/dreams', async (req, res) => {
     res.status(500).json({ error: 'dream was not saved' });
   }
 });
+
+
+app.post('/api/dreams/:dreamId/like', async (req, res) => {
+  const dreamId = req.params.dreamId;
+  const { user } = req.body;
+  const userId = new mongoose.Types.ObjectId(user);
+
+  const dream = await DreamEntry.findById(dreamId);
+  if (!dream) {
+    res.status(404).send('dream post does not exist');
+    return 
+  }
+
+  if (dream.likes.includes(userId)){
+    res.status(400).send('dream post already liked');
+    return
+  }
+
+  dream.likes.push(userId);
+  await dream.save();
+
+  res.sendStatus(200);
+} )
 
 
 app.get('/api/dreams', async (req, res) => {

@@ -17,7 +17,7 @@ function Login() {
 
         if (result.data.message === "Success") {
           // store each user for local database, dream and sleep logs
-          localStorage.setItem('userEmail', result.data.user.email);
+          localStorage.setItem('user', JSON.stringify(result.data.user));
 
           // go to dashboard
           navigate('/home');
