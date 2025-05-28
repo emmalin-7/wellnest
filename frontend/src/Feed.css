@@ -243,3 +243,7 @@ html, body {
   width: 16px;
   height: 16px;
 }
+
+.comment-header {
+  font-weight: bold;
+}

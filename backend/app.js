@@ -141,7 +141,8 @@ app.get('/api/dreams', async (req, res) => {
 
     const dreams = await DreamEntry.find(filter)
       .sort({ date: -1, created: -1 })
-      .populate('user', 'name');
+      .populate('user', 'name')
+      .populate('comments.user', 'name email');
 
     res.json(dreams);
   } catch (err) {
