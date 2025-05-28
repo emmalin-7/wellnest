@@ -7,6 +7,7 @@ import Login from './Login';
 import Home from './Home';
 import Leaderboard from './Leaderboard';
 import Feed from './Feed';
+import UserProfile from './UserProfile';
 
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/feed" element={<Feed />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="*" element={<div style={{ padding: 40 }}><h1>404 - Page Not Found</h1></div>} />
       </Routes>
     </Router>

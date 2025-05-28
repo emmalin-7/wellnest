@@ -1,0 +1,77 @@
+.profile-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.profile-page h2 {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.profile-page p {
+  text-align: center;
+  margin-top: 0;
+  color: #666;
+}
+
+.chart-wrapper {
+  margin: 40px 0;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.dream-entry {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.dream-entry:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.dream-entry strong {
+  font-size: 1rem;
+  color: #111;
+}
+
+.dream-entry p {
+  margin: 8px 0;
+  line-height: 1.5;
+  color: #444;
+}
+
+.profile-page h3 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+  margin-top: 30px;
+  color: #04AA6D;
+}
+
+.back-button-wrapper {
+  margin: 1rem 2rem;
+}
+
+.back-button {
+  background-color: #04AA6D;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #038e5d;
+}

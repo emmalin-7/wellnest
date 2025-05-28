@@ -149,7 +149,9 @@ function Feed() {
             <div key={i} className="dream-post">
               <div className="post-header">
                 <strong>
-                  {typeof dream.user === 'object' ? dream.user.name : dream.user}
+                  <Link to={`/profile/${typeof dream.user === 'object' ? dream.user._id : dream.user}`}>
+                    {typeof dream.user === 'object' ? dream.user.name : dream.user}
+                  </Link>
                 </strong>
                 <span>
                   {new Date(dream.date).toLocaleDateString('en-US', {

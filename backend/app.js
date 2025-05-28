@@ -212,6 +212,19 @@ app.delete('/api/dreams/:id', async (req, res) => {
   }
 });
 
+// visiting user profiles 
+
+app.get('/api/users/:userId', async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId).select('name email');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user info' });
+  }
+});
+
+
 app.get('/', (req, res) => {
   res.send('backend runningggg, dream logging should work right now, check the console to see constant updates and error checking');
 });
