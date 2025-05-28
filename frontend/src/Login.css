@@ -81,7 +81,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.tagline {
+.login-tagline {
   color: #000;
   font-family: "Cooper Lt BT";
   font-size: 52px;
@@ -141,11 +141,11 @@ form {
   width: 100%;
   box-sizing: border-box;
   height: 40px;
-  font-family: "Cooper Lt BT";
+  font-family: "DM Sans", sans-serif;
 }
 
 .login-card .form-group input::placeholder {
-  font-family: "Cooper Lt BT";
+  font-family: "DM Sans", sans-serif;
   color: #666;
 }
 
@@ -157,7 +157,7 @@ form {
   border: none;
   color: #000;
   font-family: "Cooper Lt BT";
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

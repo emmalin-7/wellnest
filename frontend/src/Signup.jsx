@@ -27,7 +27,7 @@ function Signup() {
         </div>
         <div className="signup-form-section">
           <div className="signup-card">
-            <p className="tagline">Welcome to Wellnest!</p>
+            <p className="signup-tagline">Welcome to Wellnest!</p>
             <p className="subtitle">Make an Account</p>
             
             <form onSubmit={handleSubmit}>

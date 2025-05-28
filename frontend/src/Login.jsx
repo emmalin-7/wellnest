@@ -39,8 +39,8 @@ function Login() {
         </div>
         <div className="login-form-section">
           <div className="login-card">
-            <p className="tagline">Welcome back</p>
-            
+            <p className="login-tagline">Welcome Back!</p>
+            <p className="subtitle">Log in to your account</p>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
