@@ -96,54 +96,65 @@ function Feed() {
         </div>
       </div>
 
-      {/* search mode toggle bar */}
-      <div className="search-toggle">
-        <span>Search by:</span>
-        <label className="search-option">
-          <input
-            type="radio"
-            value="content"
-            checked={searchMode === 'content'}
-            onChange={() => setSearchMode('content')}
-          />
-          <span>Content</span>
-        </label>
-        <label className="search-option">
-          <input
-            type="radio"
-            value="hours"
-            checked={searchMode === 'hours'}
-            onChange={() => setSearchMode('hours')}
-          />
-          <span>Hours</span>
-        </label>
-      </div>
-
-      {/* search bar */}
-      <div className="search-bar">
-        {searchMode === 'content' && (
-          <input
-            type="text"
-            placeholder="Search public dreams..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
-          />
-        )}
-        {searchMode === 'hours' && (
-          <input
-            type="number"
-            placeholder="Search by hours"
-            value={hourSearch}
-            onChange={(e) => setHourSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
-          />
-        )}
-        <button onClick={fetchPublicDreams}>Search</button>
-      </div>
-
       <div className="feed-container">
-        <h2>🌔 Wellnest</h2>
+        <div className="feed-header">
+          <img src="/Feed-Logo.svg" alt="Feed Logo" className="feed-logo" />
+          <p className="feed-title">💤 Dream Feed</p>
+          <p className="feed-subtitle">Explore dreams shared by the community!</p>
+        </div>
+
+        {/* search mode toggle bar */}
+        <div className="search-toggle">
+          <p className="search-label">Search by:</p>
+          <div className="search-options">
+            <label className="search-option">
+              <input
+                type="radio"
+                value="content"
+                checked={searchMode === 'content'}
+                onChange={() => setSearchMode('content')}
+              />
+              <span>Content</span>
+            </label>
+            <label className="search-option">
+              <input
+                type="radio"
+                value="hours"
+                checked={searchMode === 'hours'}
+                onChange={() => setSearchMode('hours')}
+              />
+              <span>Hours</span>
+            </label>
+          </div>
+        </div>
+
+        {/* search bar */}
+        <div className="search-section">
+          <p className="search-description">Search through dreams</p>
+          <div className="search-bar">
+            <img src="/Search.svg" alt="Search" className="search-icon" />
+            {searchMode === 'content' && (
+              <input
+                type="text"
+                placeholder="Try keywords like 'flying' or 'nightmare'"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+              />
+            )}
+            {searchMode === 'hours' && (
+              <input
+                type="number"
+                placeholder="Enter hours of sleep"
+                value={hourSearch}
+                onChange={(e) => setHourSearch(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+              />
+            )}
+            <button onClick={fetchPublicDreams} className="feed-search-button">Search</button>
+          </div>
+        </div>
+
         {Array.isArray(dreams) && dreams.length > 0 ? (
           dreams.map((dream, i) => (
             <div key={i} className="dream-post">
