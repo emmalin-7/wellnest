@@ -33,43 +33,49 @@ function Login() {
 
   return (
     <div className="login-container">
-      <div className="login-card">
-        <img src="/Wellnest-Logo.svg" alt="Wellnest Logo" className="logo" />
-        <p className="tagline">Welcome back to Wellnest!</p>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              autoComplete="off"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+      <div className="login-split">
+        <div className="login-image-section">
+          <img src="/Wellnest-Login-Image.svg" alt="Wellnest Login" className="login-image" />
+        </div>
+        <div className="login-form-section">
+          <div className="login-card">
+            <p className="tagline">Welcome back</p>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  placeholder="Enter Email"
+                  autoComplete="off"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-          <button type="submit">Login</button>
-        </form>
-        
-        <p className="signup-link">
-          <span>New to Wellnest?</span>
-          <Link to="/register">Create an account!</Link>
-        </p>
+              <button type="submit">Login</button>
+            </form>
+            
+            <p className="signup-link">
+              <span>New to Wellnest?</span>
+              <Link to="/register">Create an account!</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

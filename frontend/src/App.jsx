@@ -7,8 +7,6 @@ import Login from './Login';
 import Home from './Home';
 import Leaderboard from './Leaderboard';
 import Feed from './Feed';
-
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {

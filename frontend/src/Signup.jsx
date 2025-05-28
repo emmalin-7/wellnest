@@ -21,54 +21,61 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <div className="signup-card">
-        <img src="/Wellnest-Logo.svg" alt="Wellnest Logo" className="logo" />
-        <p className="tagline">Log Your Sleep & Dreams, Connect with Friends.</p>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              placeholder="Enter Name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
+      <div className="signup-split">
+        <div className="signup-image-section">
+          <img src="/Wellnest-Signup-Image.svg" alt="Wellnest Signup" className="signup-image" />
+        </div>
+        <div className="signup-form-section">
+          <div className="signup-card">
+            <p className="tagline">Welcome to Wellnest!</p>
+            <p className="subtitle">Make an Account</p>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter Name"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  placeholder="Enter Email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-          <button type="submit">Register</button>
-        </form>
-        
-        <p className="signup-link">
-          <span>Already have an account?</span>
-          <Link to="/login">Log in!</Link>
-        </p>
+              <button type="submit">Register</button>
+            </form>
+            
+            <p className="signup-link">
+              <span>Already have an account?</span>
+              <Link to="/login">Log in!</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
