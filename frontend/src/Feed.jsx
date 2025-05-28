@@ -40,6 +40,50 @@ function Feed() {
     fetchPublicDreams();
   }, []);
 
+  const handleLike = async (dreamId) => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+    try {
+      const res = await axios.post('/api/dreams/' + dreamId + '/like', { user:userId });
+      alert('dream successfully liked')
+      setDreams(prev => {
+        return prev.map(entry => {
+          if (entry._id == dreamId){
+            return {...entry, likes: [ ...entry.likes, userId ]}
+          }
+          return entry;
+        })
+      })
+    } catch (error) {
+      alert(error.response.data)
+    }
+  }
+
+  const handleComment = async (dreamId, e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+    
+    console.log('hello');
+    try {
+      const body = { user:userId, content:e.target.content.value };
+      const res = await axios.post('/api/dreams/' + dreamId + '/comment', body );
+      alert('dream successfully commented on')
+      setDreams(prev => {
+        return prev.map(entry => {
+          if (entry._id == dreamId){
+            return {...entry, comments: [ ...entry.comments, body ]}
+          }
+          return entry;
+        })
+      })
+    } catch (error) {
+      console.error(error);
+      alert(error.response.data)
+    }
+  }
+
   return (
     <>
       
@@ -119,6 +163,30 @@ function Feed() {
                 <p><em>{dream.hours} hours of sleep</em></p>
               )}
               <p>{dream.content}</p>
+              <button onClick={() => handleLike(dream._id)}> 
+                ♡
+              </button>
+              <span>
+                {dream.likes.length} Likes
+              </span>
+              <div>
+                {dream.comments.map((comment)=> {
+                  return <div>
+                    {comment.user}/{
+                      comment.content
+                    }
+                  </div>
+                })}
+              </div>
+              <form onSubmit={(e) => handleComment(dream._id, e)}> 
+                <div>
+                  Add a Comment!
+                </div>
+                <textarea name='content'></textarea>
+                <button>
+                  ↵
+                </button>
+              </form>
             </div>
           ))
         ) : (

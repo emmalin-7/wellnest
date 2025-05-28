@@ -10,7 +10,12 @@ const DreamSchema = new mongoose.Schema({
   user: { type: String, required: true },
   isPublic: { type: Boolean, default: false },
   hours: { type: Number, required: false },
-  created: { type: Date, default: Date.now }
+  created: { type: Date, default: Date.now },
+  likes: [{ type: mongoose.Types.ObjectId, ref: "users" }],
+  comments: [{
+    user: { type: mongoose.Types.ObjectId, ref: "users" }, 
+    content: { type: String, required: true }
+  }]
 });
 
 export default mongoose.model('DreamEntry', DreamSchema);
