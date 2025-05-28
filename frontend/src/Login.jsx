@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if we came from registration
+    if (location.state?.fromRegistration) {
+      setShowSuccessBanner(true);
+      // Hide banner after 5 seconds
+      const timer = setTimeout(() => {
+        setShowSuccessBanner(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,6 +47,11 @@ function Login() {
 
   return (
     <div className="login-container">
+      {showSuccessBanner && (
+        <div className="success-banner">
+          <p>✅ Your account has been created. Please log in.</p>
+        </div>
+      )}
       <div className="login-split">
         <div className="login-image-section">
           <img src="/Wellnest-Login-Image.svg" alt="Wellnest Login" className="login-image" />

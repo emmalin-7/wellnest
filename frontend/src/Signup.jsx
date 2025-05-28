@@ -14,7 +14,7 @@ function Signup() {
     axios.post('http://localhost:5001/register', { name, email, password })
       .then(result => {
         console.log(result);
-        navigate('/login');
+        navigate('/login', { state: { fromRegistration: true } });
       })
       .catch(err => console.log(err));
   };
@@ -28,7 +28,7 @@ function Signup() {
         <div className="signup-form-section">
           <div className="signup-card">
             <p className="signup-tagline">Welcome to Wellnest!</p>
-            <p className="subtitle">Make an Account</p>
+            <p className="subtitle">Create an Account</p>
             
             <form onSubmit={handleSubmit}>
               <div className="form-group">
