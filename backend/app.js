@@ -114,6 +114,14 @@ app.post('/api/dreams/:dreamId/comment', async (req, res) => {
   const dreamId = req.params.dreamId;
   const { user, content } = req.body;
 
+  if (!user) {
+    return res.status(400).send('User required');
+  }
+
+  if (!content) {
+    return res.status(400).send('Content required');
+  }
+
   let userId = user;
   if (!mongoose.Types.ObjectId.isValid(user)) {
     const userDoc = await UserModel.findOne({ email: user });
