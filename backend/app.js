@@ -52,6 +52,7 @@ app.post("/login", (req, res) => {
     });
 });
 
+// creating users into database
 app.post('/register', (req, res) => {
   UserModel.create(req.body)
     .then(user => res.json(user))

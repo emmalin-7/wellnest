@@ -33,15 +33,24 @@ function Home() {
 
   const logSleep = async (e) => {
     e.preventDefault();
-    if (!sleepHours) return;
-    await axios.post('/api/sleep', { date: today, hours: Number(sleepHours), user: userId });
+    const hours = Number(sleepHours);
+    if (!sleepHours || hours < 0 || hours > 24) {
+      alert('Please enter a valid number of hours between 0 and 24.');
+      return;
+    }
+
+    await axios.post('/api/sleep', { date: today, hours, user: userId });
     setSleepHours('');
     fetchSleepData();
   };
 
   const submitDream = async (e) => {
     e.preventDefault();
-    if (!dreamText || !sleepHours) return;
+    const hours = Number(sleepHours);
+    if (!dreamText || !sleepHours || hours < 0 || hours > 24) {
+      alert('Please enter a dream and a valid number of hours (0–24).');
+      return;
+    }
 
     try {
       const res = await axios.post('/api/dreams', {
@@ -49,7 +58,7 @@ function Home() {
         content: dreamText,
         user: userId,
         isPublic,
-        hours: Number(sleepHours)
+        hours
       });
 
       setDreamText('');
@@ -67,10 +76,17 @@ function Home() {
         params: { user: userId }
       });
 
+      // Filter for valid hour entries
       const filtered = res.data.filter(d => typeof d.hours === 'number');
-      const sorted = filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-      const recent = sorted.slice(-7); // Only keep the 7 most recent entries
-      setSleepData(recent);
+
+      // Sort by date descending (newest first)
+      const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Take the 7 most recent entries
+      const recent = sorted.slice(0, 7);
+
+      // Reverse again so that oldest is on the left, newest on right
+      setSleepData(recent.reverse());
     } catch (err) {
       console.error('Failed to fetch sleep data from dreams:', err);
     }
@@ -101,7 +117,7 @@ function Home() {
         params: { user: userId }
       });
       setDreams(prev => prev.filter(d => d._id !== dreamId));
-      fetchSleepData(); // update chart if needed
+      fetchSleepData(); 
     } catch (err) {
       console.error('Failed to delete dream:', err);
       alert('Could not delete dream.');
