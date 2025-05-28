@@ -6,12 +6,10 @@ import { Link, useNavigate } from 'react-router-dom';
 function Leaderboard() {
   const [top10, setTop10] = useState([]);
   const [bottom10, setBottom10] = useState([]);
-  const navigate = useNavigate();
-
-  // default to top 10
   const [view, setView] = useState('top');
   const [fallback, setFallback] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
@@ -68,7 +66,7 @@ function Leaderboard() {
           displayedList.map((entry, i) => (
             <div key={i} className="dream-post">
               <div className="post-header">
-                <strong>{entry._id}</strong>
+                <strong>{entry._id?.name || 'Unknown User'}</strong>
                 <span>{entry.totalHours ?? 0} hrs</span>
               </div>
             </div>

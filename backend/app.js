@@ -8,10 +8,6 @@ import { fileURLToPath } from 'url';
 import UserModel from './models/users.js';
 import DreamEntry from './models/dreams.js';
 
-// creating dreamentry for the dream log 
-import mongoosePkg from 'mongoose';
-const { Schema, model } = mongoosePkg;
-
 // connect to .env
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,10 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("connected to mongodb"))
   .catch((err) => console.error("mongodb connection error:", err));
 
-
-
-// user login and register routes (this should work, is tested)
-
+// user login and register routes
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -38,8 +31,14 @@ app.post("/login", (req, res) => {
     .then(account => {
       if (account) {
         if (account.password === password) {
-          // changed to store the email 
-          res.json({ message: "Success", user: { email: account.email, id: account._id } });
+          res.json({
+            message: "Success",
+            user: {
+              email: account.email,
+              id: account._id,
+              name: account.name
+            }
+          });
         } else {
           res.json({ message: "Incorrect password" });
         }
@@ -59,24 +58,24 @@ app.post('/register', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-
-
-// logging dream routes 
-
+// logging dream routes
 app.post('/api/dreams', async (req, res) => {
   try {
     const { date, content, user, isPublic, hours } = req.body;
 
-    if (!user) {
-      return res.status(400).json({ error: 'missing user' });
-    }
+    if (!user) return res.status(400).json({ error: 'missing user' });
 
-    console.log('Received dream post:', req.body);
+    let userId = user;
+    if (!mongoose.Types.ObjectId.isValid(user)) {
+      const userDoc = await UserModel.findOne({ email: user });
+      if (!userDoc) return res.status(400).json({ error: 'User not found' });
+      userId = userDoc._id;
+    }
 
     const newDream = new DreamEntry({
       date,
       content,
-      user,
+      user: userId,
       isPublic: !!isPublic,
       hours: hours !== undefined ? Number(hours) : undefined
     });
@@ -90,72 +89,65 @@ app.post('/api/dreams', async (req, res) => {
   }
 });
 
-
 app.post('/api/dreams/:dreamId/like', async (req, res) => {
   const dreamId = req.params.dreamId;
   const { user } = req.body;
-  const userId = new mongoose.Types.ObjectId(user);
+
+  let userId = user;
+  if (!mongoose.Types.ObjectId.isValid(user)) {
+    const userDoc = await UserModel.findOne({ email: user });
+    if (!userDoc) return res.status(400).send('User not found');
+    userId = userDoc._id;
+  }
 
   const dream = await DreamEntry.findById(dreamId);
-  if (!dream) {
-    res.status(404).send('dream post does not exist');
-    return 
-  }
-
-  if (dream.likes.includes(userId)){
-    res.status(400).send('dream post already liked');
-    return
-  }
+  if (!dream) return res.status(404).send('dream post does not exist');
+  if (dream.likes.includes(userId)) return res.status(400).send('dream post already liked');
 
   dream.likes.push(userId);
   await dream.save();
-
   res.sendStatus(200);
-} )
+});
 
 app.post('/api/dreams/:dreamId/comment', async (req, res) => {
   const dreamId = req.params.dreamId;
   const { user, content } = req.body;
-  const userId = new mongoose.Types.ObjectId(user);
 
-  const dream = await DreamEntry.findById(dreamId);
-  if (!dream) {
-    res.status(404).send('dream post does not exist');
-    return 
+  let userId = user;
+  if (!mongoose.Types.ObjectId.isValid(user)) {
+    const userDoc = await UserModel.findOne({ email: user });
+    if (!userDoc) return res.status(400).send('User not found');
+    userId = userDoc._id;
   }
 
-  dream.comments.push({
-    user:userId, content
-  })
+  const dream = await DreamEntry.findById(dreamId);
+  if (!dream) return res.status(404).send('dream post does not exist');
 
+  dream.comments.push({ user: userId, content });
   await dream.save();
   res.sendStatus(200);
-})
-
+});
 
 app.get('/api/dreams', async (req, res) => {
   try {
     const { user , search, isPublic, hours } = req.query;
 
-    // filter users and public/private
     const filter = {};
     if (user) filter.user = user;
     if (isPublic === 'true') filter.isPublic = true;
-    if (search) {
-      filter.content = { $regex: new RegExp(search, 'i') }; 
-    }
+    if (search) filter.content = { $regex: new RegExp(search, 'i') };
     if (hours) filter.hours = Number(hours);
 
-    const dreams = await DreamEntry.find(filter).sort({ date: -1, created: -1 });
+    const dreams = await DreamEntry.find(filter)
+      .sort({ date: -1, created: -1 })
+      .populate('user', 'name');
+
     res.json(dreams);
   } catch (err) {
     console.error('Failed to fetch dreams:', err);
     res.status(500).json({ error: 'failed to fetch dreams' });
   }
 });
-
-
-// leaderboard
 
 app.get('/api/leaderboard', async (req, res) => {
   try {
@@ -164,13 +156,11 @@ app.get('/api/leaderboard', async (req, res) => {
     weekAgo.setDate(today.getDate() - 6);
     const weekAgoStr = weekAgo.toISOString().slice(0, 10);
 
-    // checking last 7 days
     const recentCount = await DreamEntry.countDocuments({
       date: { $gte: weekAgoStr },
       hours: { $gt: 0 }
     });
 
-    // otherwise all-time
     const matchCondition = recentCount >= 10
       ? { date: { $gte: weekAgoStr }, hours: { $gt: 0 } }
       : { hours: { $gt: 0 } };
@@ -186,19 +176,40 @@ app.get('/api/leaderboard', async (req, res) => {
       { $sort: { totalHours: -1 } }
     ]);
 
-    const top10 = leaderboardData.slice(0, 10);
-    const bottom10 = leaderboardData.slice(-10).reverse();
+    // Populate user names
+    const populated = await UserModel.populate(leaderboardData, { path: '_id', select: 'name' });
+
+    const top10 = populated.slice(0, 10);
+    const bottom10 = populated.slice(-10).reverse();
 
     res.json({ top10, bottom10, fallback: recentCount < 10 });
-
   } catch (err) {
     console.error("Leaderboard route error:", err);
     res.status(500).json({ error: "Leaderboard route failed" });
   }
 });
 
+// deleting posts
 
-// backend run check
+app.delete('/api/dreams/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.query.user; // for safety, we confirm ownership
+
+    const dream = await DreamEntry.findById(id);
+    if (!dream) return res.status(404).json({ error: 'Dream not found' });
+
+    if (dream.user.toString() !== userId) {
+      return res.status(403).json({ error: 'Unauthorized: Cannot delete this dream' });
+    }
+
+    await dream.deleteOne();
+    res.status(200).json({ message: 'Dream deleted' });
+  } catch (err) {
+    console.error('Error deleting dream:', err);
+    res.status(500).json({ error: 'Failed to delete dream' });
+  }
+});
 
 app.get('/', (req, res) => {
   res.send('backend runningggg, dream logging should work right now, check the console to see constant updates and error checking');

@@ -205,3 +205,20 @@ button:hover {
   align-items: center;
   gap: 0.4rem;
 }
+
+.post-header-with-trash {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trash-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #b33a3a;
+}
+.trash-button:hover {
+  color: red;
+}
