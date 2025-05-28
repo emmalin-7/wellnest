@@ -60,18 +60,66 @@ html, body {
   margin-bottom: 8px;
 }
 
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 8px 16px;
+  background-color: #FFDE82;
+  border: none;
+  border-radius: 4px;
+  color: #4D4D4D;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.search-bar button:hover {
+  background-color: #FFD666;
+}
+
 .search-toggle {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 0.5rem 0;
-  margin-left: 0.7rem;
+  margin: 80px auto 20px;
+  max-width: 600px;
+  padding: 0 20px;
   font-weight: 500;
+  background: #f8f9fa;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .search-option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.search-option:hover {
+  background-color: #e9ecef;
+}
+
+.search-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
 }
 

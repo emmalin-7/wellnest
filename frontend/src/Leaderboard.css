@@ -159,8 +159,8 @@ html, body {
   margin-bottom: 6px;
   width: 100%;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .dream-post.first-place {
@@ -185,7 +185,7 @@ html, body {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  min-width: 60px;
+  text-align: center;
 }
 
 .user-name {
@@ -195,12 +195,13 @@ html, body {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  flex-grow: 1;
+  text-align: center;
 }
 
 .sleep-stats {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 
