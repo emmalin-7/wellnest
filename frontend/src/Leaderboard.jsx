@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Feed.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Leaderboard() {
   const [top10, setTop10] = useState([]);
   const [bottom10, setBottom10] = useState([]);
+  const navigate = useNavigate();
 
   // default to top 10
   const [view, setView] = useState('top');
   const [fallback, setFallback] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    navigate('/login');
+  };
 
   useEffect(() => {
     axios.get('/api/leaderboard')
@@ -39,17 +45,17 @@ function Leaderboard() {
         </div>
         <div className="right-link">
           <Link to="/home">Profile</Link>
+          <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>
       </div>
 
-      <div className="feed-container">
-        <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Sleep Leaderboard</h1>
-        
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
-          <button onClick={() => setView('top')}>Top 10</button>
-          <button onClick={() => setView('bottom')}>Bottom 10</button>
-        </div>
+      {/* toggle view for the different leaderboards */}
+      <div className="search-bar">
+        <button onClick={() => setView('top')}>Top 10</button>
+        <button onClick={() => setView('bottom')}>Bottom 10</button>
+      </div>
 
+      <div className="feed-container">
         <h2>{title}</h2>
         {fallback && (
           <p style={{ fontStyle: 'italic', color: '#888' }}>

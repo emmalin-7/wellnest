@@ -26,7 +26,12 @@ function Home() {
 
   const userEmail = localStorage.getItem('userEmail');
   console.log('User email:', userEmail);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   const [isPublic, setIsPublic] = useState(false);
 

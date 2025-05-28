@@ -67,8 +67,8 @@ function Login() {
         </form>
         
         <p className="signup-link">
-          <span>Don't have an account?</span>
-          <Link to="/register">Join us!</Link>
+          <span>New to Wellnest?</span>
+          <Link to="/register">Create an account!</Link>
         </p>
       </div>
     </div>

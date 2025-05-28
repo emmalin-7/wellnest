@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Feed.css';
 import { Bar } from 'react-chartjs-2';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Feed() {
   const [dreams, setDreams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState('content');
   const [hourSearch, setHourSearch] = useState('');
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    navigate('/login');
+  };
 
   const fetchPublicDreams = async () => {
     try {
@@ -46,6 +51,7 @@ function Feed() {
         </div>
         <div className="right-link">
           <Link to="/home">Profile</Link>
+          <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>
       </div>
 
@@ -103,7 +109,11 @@ function Feed() {
             <div key={i} className="dream-post">
               <div className="post-header">
                 <strong>{dream.user}</strong>
-                <span>{dream.date}</span>
+                <span>{new Date(dream.date).toLocaleDateString('en-US', {
+                  month: 'numeric',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}</span>
               </div>
               {dream.hours != null && (
                 <p><em>{dream.hours} hours of sleep</em></p>
