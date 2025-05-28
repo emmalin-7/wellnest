@@ -8,8 +8,6 @@ import Home from './Home';
 import Leaderboard from './Leaderboard';
 import Feed from './Feed';
 import UserProfile from './UserProfile';
-
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
