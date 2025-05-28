@@ -113,6 +113,25 @@ app.post('/api/dreams/:dreamId/like', async (req, res) => {
   res.sendStatus(200);
 } )
 
+app.post('/api/dreams/:dreamId/comment', async (req, res) => {
+  const dreamId = req.params.dreamId;
+  const { user, content } = req.body;
+  const userId = new mongoose.Types.ObjectId(user);
+
+  const dream = await DreamEntry.findById(dreamId);
+  if (!dream) {
+    res.status(404).send('dream post does not exist');
+    return 
+  }
+
+  dream.comments.push({
+    user:userId, content
+  })
+
+  await dream.save();
+  res.sendStatus(200);
+})
+
 
 app.get('/api/dreams', async (req, res) => {
   try {
