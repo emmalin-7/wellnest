@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // ✅ Fix 1
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -18,9 +18,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 function UserProfile() {
   const { userId } = useParams();
+  const [sleepData, setSleepData] = useState([]);
   const [userDreams, setUserDreams] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
-  const navigate = useNavigate(); // ✅ Fix 2
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +29,11 @@ function UserProfile() {
         const dreamsRes = await axios.get('/api/dreams', {
           params: { user: userId, isPublic: true }
         });
+        const validDreams = dreamsRes.data.filter(d => typeof d.hours === 'number');
+
+        const sorted = validDreams.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const recent = sorted.slice(0, 7).reverse();
+        setSleepData(recent);
         setUserDreams(dreamsRes.data);
 
         const userRes = await axios.get(`/api/users/${userId}`);
@@ -45,21 +51,8 @@ function UserProfile() {
     navigate('/login');
   };
 
-  const sleepData = userDreams
-    .filter(d => typeof d.hours === 'number')
-    .reduce((acc, dream) => {
-      if (!acc[dream.date]) acc[dream.date] = 0;
-      acc[dream.date] += dream.hours;
-      return acc;
-    }, {});
-
-  const sleepEntries = Object.entries(sleepData)
-    .map(([date, hours]) => ({ date, hours }))
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(-7);
-
   const chartData = {
-    labels: sleepEntries.map((e) => {
+    labels: sleepData.map((e) => {
       const [year, month, day] = e.date.split('-');
       const localDate = new Date(Number(year), Number(month) - 1, Number(day));
       return localDate.toLocaleDateString('en-US', {
@@ -70,7 +63,7 @@ function UserProfile() {
     datasets: [
       {
         label: 'Hours Slept',
-        data: sleepEntries.map(e => e.hours),
+        data: sleepData.map((e) => e.hours),
         backgroundColor: '#04AA6D',
       },
     ],
@@ -111,18 +104,17 @@ function UserProfile() {
 
       <div className="profile-page">
         <h2>{userInfo?.name || 'User Profile'}</h2>
-        <p>{userInfo?.email}</p>
 
         <div className="chart-wrapper">
           <Bar data={chartData} options={chartOptions} />
         </div>
 
-        <h3>Public Dream Logs</h3>
+        <h3>Dream Logs</h3>
         {userDreams.length > 0 ? (
           userDreams.map((d, i) => (
             <div key={i} className="dream-entry">
               <strong>{d.date}</strong>
-              {d.hours != null && <p><em>{d.hours} hours</em></p>}
+              {d.hours != null && <p><em>{d.hours} hours of sleep.</em></p>}
               <p>{d.content}</p>
             </div>
           ))
