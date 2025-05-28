@@ -154,11 +154,9 @@ function Feed() {
                   </Link>
                 </strong>
                 <span>
-                  {new Date(dream.date).toLocaleDateString('en-US', {
-                    month: 'numeric',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  <span>
+                    {dream.date?.split('-').join('/')}
+                  </span>
                 </span>
               </div>
               {dream.hours != null && (
