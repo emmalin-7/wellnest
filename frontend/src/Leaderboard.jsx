@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Feed.css';
+import './Leaderboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Leaderboard() {
@@ -9,6 +10,7 @@ function Leaderboard() {
   const [view, setView] = useState('top');
   const [fallback, setFallback] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [totalUsers, setTotalUsers] = useState(0);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -22,6 +24,7 @@ function Leaderboard() {
         setTop10(res.data.top10 || []);
         setBottom10(res.data.bottom10 || []);
         setFallback(res.data.fallback || false);
+        setTotalUsers(res.data.totalUsers || 0);
         setLoading(false);
       })
       .catch(err => {
@@ -32,6 +35,24 @@ function Leaderboard() {
 
   const displayedList = view === 'top' ? top10 : bottom10;
   const title = view === 'top' ? 'Top 10 Sleepers' : 'Bottom 10 Sleepers';
+
+  const getRankDisplay = (index) => {
+    if (view === 'top') {
+      return (
+        <>
+          {index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : ''}
+          {index + 1}
+        </>
+      );
+    } else {
+      const rank = totalUsers - index;
+      return (
+        <>
+          🔻 {rank}
+        </>
+      );
+    }
+  };
 
   return (
     <>
@@ -47,33 +68,46 @@ function Leaderboard() {
         </div>
       </div>
 
-      {/* toggle view for the different leaderboards */}
-      <div className="search-bar">
-        <button onClick={() => setView('top')}>Top 10</button>
-        <button onClick={() => setView('bottom')}>Bottom 10</button>
-      </div>
+      <div className="leaderboard-container">
+        <div className="leaderboard-header">
+          <img src="/Wellnest-Logo-Trophy.svg" alt="Wellnest Trophy Logo" className="leaderboard-logo" />
+          <h1 className="leaderboard-title">Leaderboard</h1>
+          <p className="leaderboard-subtitle">See who's resting best (and who needs a nap).</p>
+          <div className="search-bar">
+            <button onClick={() => setView('top')}>📈 Top 10</button>
+            <button onClick={() => setView('bottom')}>📉 Bottom 10</button>
+          </div>
+        </div>
 
-      <div className="feed-container">
-        <h2>{title}</h2>
-        {fallback && (
-          <p style={{ fontStyle: 'italic', color: '#888' }}>
-            Not enough weekly data — showing all-time instead.
-          </p>
-        )}
-        {loading ? (
-          <p>Loading leaderboard...</p>
-        ) : displayedList.length > 0 ? (
-          displayedList.map((entry, i) => (
-            <div key={i} className="dream-post">
-              <div className="post-header">
-                <strong>{entry._id?.name || 'Unknown User'}</strong>
-                <span>{entry.totalHours ?? 0} hrs</span>
+        <div className="leaderboard-content">
+          <h2>{title}</h2>
+          {fallback && (
+            <p style={{ fontStyle: 'italic', color: '#888' }}>
+              Not enough weekly data — showing all-time instead.
+            </p>
+          )}
+          {loading ? (
+            <p>Loading leaderboard...</p>
+          ) : displayedList.length > 0 ? (
+            displayedList.map((entry, i) => (
+              <div key={i} className={`dream-post ${view === 'top' ? 
+                i === 0 ? 'first-place' : 
+                i === 1 ? 'second-place' : 
+                i === 2 ? 'third-place' : '' : ''}`}>
+                <div className="rank-number">
+                  {getRankDisplay(i)}
+                </div>
+                <div className="user-name">{entry._id?.name || 'Unknown User'}</div>
+                <div className="sleep-stats">
+                  <span className="sleep-label">Avg Sleep</span>
+                  <span className="sleep-hours">{entry.avgHours?.toFixed(1) ?? 0} hrs</span>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <p className="empty-feed">No data to display.</p>
-        )}
+            ))
+          ) : (
+            <p className="empty-feed">No data to display.</p>
+          )}
+        </div>
       </div>
     </>
   );
