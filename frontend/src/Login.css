@@ -1,6 +1,10 @@
 @font-face {
   font-family: "Cooper Lt BT";
-  src: url("/fonts/CooperLtBT.ttf") format("truetype");
+  src: local("Cooper Lt BT"),
+       url("/fonts/CooperLtBT.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {

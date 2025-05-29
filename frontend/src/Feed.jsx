@@ -109,6 +109,9 @@ function Feed() {
 
   return (
     <div className="feed-page">
+      {/* Test font loading */}
+      <div className="test-font" style={{ position: 'absolute', top: 0, left: 0, opacity: 0 }}>Test Font</div>
+      
       {/* nav bar */}
       <div className="topnav">
         <div className="nav-logo-container">
