@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bcrypt from 'bcrypt';
 
 import UserModel from './models/users.js';
 import DreamEntry from './models/dreams.js';
@@ -30,7 +31,8 @@ app.post("/login", (req, res) => {
   UserModel.findOne({ email })
     .then(account => {
       if (account) {
-        if (account.password === password) {
+//        if (account.password === password) {
+        if (bcrypt.compareSync(password, account.password)) {
           res.json({
             message: "Success",
             user: {
@@ -54,6 +56,8 @@ app.post("/login", (req, res) => {
 
 // creating users into database
 app.post('/register', (req, res) => {
+  const salt = bcrypt.genSaltSync(10);
+  req.body.password = bcrypt.hashSync(req.body.password, salt)
   UserModel.create(req.body)
     .then(user => res.json(user))
     .catch(err => res.status(400).json(err));
