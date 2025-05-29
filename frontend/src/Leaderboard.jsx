@@ -103,7 +103,7 @@ function Leaderboard() {
                 <div className="user-name">{entry._id?.name || 'Unknown User'}</div>
                 <div className="sleep-stats">
                   <span className="sleep-label">Avg Sleep:</span>
-                  <span className="sleep-hours">{entry.avg?.toFixed(2) ?? 0} hrs/day</span>
+                  <span className="sleep-hours">{entry.avg?.toFixed(2) ?? 0} hrs/wk</span>
                 </div>
               </div>
             ))
