@@ -89,7 +89,7 @@ body {
   font-weight: 400;
   line-height: normal;
   text-align: left;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   max-width: 600px;
   width: 100%;
 }
@@ -102,7 +102,7 @@ body {
   font-weight: 400;
   line-height: normal;
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   max-width: 600px;
   width: 100%;
 }
@@ -203,6 +203,8 @@ form {
 }
 
 .password-requirements {
+  font-family: "DM Sans";
+  margin-top: -1rem;
   font-size: 0.8rem;
   color: #666;
   margin-top: 4px;

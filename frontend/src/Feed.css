@@ -540,10 +540,11 @@ html, body {
 }
 
 .comment {
-  margin-bottom: 16px;
-  padding: 12px;
-  background: #f8f8f8;
+  background: #f5f5f5;
   border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 12px;
+  position: relative;
 }
 
 .comment-header {
@@ -564,13 +565,12 @@ html, body {
 }
 
 .comment-content {
-  color: #444;
+  color: #333;
   font-family: "DM Sans";
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 8px;
+  padding: 0 4px;
 }
 
 .delete-comment {

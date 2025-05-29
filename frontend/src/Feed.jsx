@@ -263,10 +263,22 @@ function Feed() {
                 <button 
                   className="like-button" 
                   onClick={() => handleLike(dream._id)}
-                  onMouseEnter={(e) => e.currentTarget.querySelector('img').src = '/Red-Heart.svg'}
-                  onMouseLeave={(e) => e.currentTarget.querySelector('img').src = '/Empty-Heart.svg'}
+                  onMouseEnter={(e) => {
+                    if (!dream.likes.includes(currentUserId)) {
+                      e.currentTarget.querySelector('img').src = '/Red-Heart.svg';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!dream.likes.includes(currentUserId)) {
+                      e.currentTarget.querySelector('img').src = '/Empty-Heart.svg';
+                    }
+                  }}
                 >
-                  <img src="/Empty-Heart.svg" alt="Like" className="heart-icon" />
+                  <img 
+                    src={dream.likes.includes(currentUserId) ? '/Red-Heart.svg' : '/Empty-Heart.svg'} 
+                    alt="Like" 
+                    className="heart-icon" 
+                  />
                   <span className="like-count">{dream.likes.length} {dream.likes.length === 1 ? 'Like' : 'Likes'}</span>
                 </button>
               </div>
@@ -289,7 +301,7 @@ function Feed() {
                             onClick={() => handleCommentDelete(dream._id, comment._id)}
                             className="delete-comment"
                           >
-                            🗑️
+                            <img src="/Trash.svg" alt="Delete" style={{ width: '20x', height: '20px' }} />
                           </button>
                         )}
                     </div>

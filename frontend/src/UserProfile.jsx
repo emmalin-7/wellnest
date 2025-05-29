@@ -163,7 +163,10 @@ function UserProfile() {
           <Bar data={chartData} options={chartOptions} />
         </div>
 
-        <div className="user-profile-chart-description">💭 Dream Archive</div>
+        <div className="user-profile-chart-description">
+          <img src="/Trash.svg" alt="Trash" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+          Dream Archive
+        </div>
         {userDreams.length > 0 ? (
           <div className="dreams-feed">
             {userDreams.map((d, i) => (
