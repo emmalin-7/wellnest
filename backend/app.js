@@ -146,6 +146,8 @@ app.post('/api/dreams/:dreamId/comment', async (req, res) => {
   res.sendStatus(200);
 });
 
+// deleting comments, checks per user
+
 app.delete('/api/dreams/:dreamId/comments/:commentId', async (req, res) => {
   const { dreamId, commentId } = req.params;
   const { user } = req.body;
@@ -162,16 +164,22 @@ app.delete('/api/dreams/:dreamId/comments/:commentId', async (req, res) => {
   }
 
   const dream = await DreamEntry.findById(dreamId);
+  if (!dream) return res.status(404).send('Dream post does not exist');
 
-  if (!dream) return res.status(404).send('dream post does not exist');
+  const comment = dream.comments.id(commentId);
+  if (!comment) return res.status(404).send('Comment not found');
 
-  dream.comments = dream.comments.filter((comment)=>{ 
-    return comment._id.toString()!= commentId;
-  })
+  if (comment.user.toString() !== userId.toString()) {
+    return res.status(403).send('You can only delete your own comments');
+  }
 
+  console.log(`User ${userId} attempting to delete comment ${commentId} from dream ${dreamId}`);
+  dream.comments = dream.comments.filter(c => c._id.toString() !== commentId);
   await dream.save();
+
   res.sendStatus(200);
-})
+});
+
 
 app.get('/api/dreams', async (req, res) => {
   try {

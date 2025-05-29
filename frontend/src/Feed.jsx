@@ -14,6 +14,7 @@ function Feed() {
   const [likePopupMessage, setLikePopupMessage] = useState('');
   const [showCommentPopup, setShowCommentPopup] = useState(false);
   const [showEmptyCommentPopup, setShowEmptyCommentPopup] = useState(false);
+  const currentUserId = JSON.parse(localStorage.getItem('user'))?.id;
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -83,7 +84,10 @@ function Feed() {
 
     try {
       const body = { user: userId, content: e.target.content.value };
-      await axios.post('/api/dreams/' + dreamId + '/comment', body);
+      await axios.post('/api/dreams/' + dreamId + '/comment', {
+        user: userId,
+        content: e.target.content.value
+      });
       setShowCommentPopup(true);
       setDreams((prev) =>
         prev.map((entry) =>
@@ -105,10 +109,17 @@ function Feed() {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
 
-    await axios.delete('/api/dreams/' + dreamId + '/comments/' + commentId, {
-      data:{user:userId}
-    })
-  }
+    try {
+      await axios.delete(`/api/dreams/${dreamId}/comments/${commentId}`, {
+        data: { user: userId }
+      });
+
+      fetchPublicDreams();
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+      alert('Failed to delete comment.');
+    }
+  };
 
   return (
     <div className="feed-page">
@@ -273,7 +284,14 @@ function Feed() {
                   <div key={idx} className="comment">
                     <div className="comment-header">
                       <span className="comment-user">{comment.user?.name || 'unknown user'}</span>
-                      <button onClick={() => handleCommentDelete(dream._id, comment._id)} className="delete-comment">🗑️</button>
+                        {(comment.user === currentUserId || comment.user?._id === currentUserId) && (
+                          <button
+                            onClick={() => handleCommentDelete(dream._id, comment._id)}
+                            className="delete-comment"
+                          >
+                            🗑️
+                          </button>
+                        )}
                     </div>
                     <div className="comment-content">{comment.content}</div>
                   </div>
