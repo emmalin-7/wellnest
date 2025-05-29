@@ -29,6 +29,8 @@ function Home() {
   const today = new Date().toISOString().split('T')[0];
   const [isPublic, setIsPublic] = useState(false);
 
+  const [hasPostedToday, setHasPostedToday] = useState(false);
+
   const navigate = useNavigate();
 
   const logSleep = async (e) => {
@@ -101,11 +103,17 @@ function Home() {
       if (searchMode === 'hours' && sleepSearch.trim()) {
         params.hours = sleepSearch;
       }
+
       const res = await axios.get('/api/dreams', { params });
       setDreams(res.data);
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const hasPosted = res.data.some(d => d.date === todayStr);
+      setHasPostedToday(hasPosted);
     } catch (err) {
       console.error('Failed to get dreams:', err);
       setDreams([]);
+      setHasPostedToday(false);
     }
   };
 
@@ -118,6 +126,7 @@ function Home() {
       });
       setDreams(prev => prev.filter(d => d._id !== dreamId));
       fetchSleepData(); 
+      fetchDreams();
     } catch (err) {
       console.error('Failed to delete dream:', err);
       alert('Could not delete dream.');
@@ -198,27 +207,35 @@ function Home() {
 
           <div className="card dreams-card combined-dream-card">
             <div className="card-title">Today's Sleep Log: </div>
+            {hasPostedToday && (
+              <p className="info-text">You’ve already posted your dream today!</p>
+            )}
             <input
               type="number"
               placeholder="Enter hours slept"
               value={sleepHours}
               onChange={(e) => setSleepHours(e.target.value)}
               className="input-hours"
+              disabled={hasPostedToday}
             />
             <textarea
               value={dreamText}
               onChange={(e) => setDreamText(e.target.value)}
               placeholder="Write about your dream..."
+              disabled={hasPostedToday}
             />
             <label className="public-checkbox">
               <input
                 type="checkbox"
                 checked={isPublic}
                 onChange={(e) => setIsPublic(e.target.checked)}
+                disabled={hasPostedToday}
               />
               Share to Feed
             </label>
-            <button onClick={submitDream}>Post Dream</button>
+            <button onClick={submitDream} disabled={hasPostedToday}>
+              {hasPostedToday ? "Already Posted" : "Post Dream"}
+            </button>
           </div>
 
           <div className="search-toggle">

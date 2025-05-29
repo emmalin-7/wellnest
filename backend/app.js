@@ -77,6 +77,11 @@ app.post('/api/dreams', async (req, res) => {
       userId = userDoc._id;
     }
 
+    const existing = await DreamEntry.findOne({ user: userId, date });
+    if (existing) {
+      return res.status(400).json({ error: 'You already posted a dream for today.' });
+    }
+
     const newDream = new DreamEntry({
       date,
       content,
