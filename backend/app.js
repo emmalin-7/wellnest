@@ -146,6 +146,33 @@ app.post('/api/dreams/:dreamId/comment', async (req, res) => {
   res.sendStatus(200);
 });
 
+app.delete('/api/dreams/:dreamId/comments/:commentId', async (req, res) => {
+  const { dreamId, commentId } = req.params;
+  const { user } = req.body;
+
+  if (!user) {
+    return res.status(400).send('User required');
+  }
+
+  let userId = user;
+  if (!mongoose.Types.ObjectId.isValid(user)) {
+    const userDoc = await UserModel.findOne({ email: user });
+    if (!userDoc) return res.status(400).send('User not found');
+    userId = userDoc._id;
+  }
+
+  const dream = await DreamEntry.findById(dreamId);
+
+  if (!dream) return res.status(404).send('dream post does not exist');
+
+  dream.comments = dream.comments.filter((comment)=>{ 
+    return comment._id.toString()!= commentId;
+  })
+
+  await dream.save();
+  res.sendStatus(200);
+})
+
 app.get('/api/dreams', async (req, res) => {
   try {
     const { user , search, isPublic, hours } = req.query;
