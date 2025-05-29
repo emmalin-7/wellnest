@@ -88,8 +88,12 @@ function UserProfile() {
   return (
     <>
       <div className="topnav">
-        <div className="left-links">
-          <Link to="/feed">Feed</Link>
+        <div className="nav-logo-container">
+          <Link to="/feed">
+            <img src="/Nav-Logo-Profile.svg" alt="Nav Logo" className="nav-logo" />
+          </Link>
+        </div>
+        <div className="nav-links">
           <Link to="/leaderboard">Leaderboards</Link>
         </div>
         <div className="right-link">

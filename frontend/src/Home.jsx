@@ -142,6 +142,13 @@ function Home() {
     fetchDreams();
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add('home-page');
+    return () => {
+      document.body.classList.remove('home-page');
+    };
+  }, []);
+
   const chartData = {
     labels: sleepData.map((e) => {
       const [year, month, day] = e.date.split('-');
@@ -185,7 +192,9 @@ function Home() {
     <>
       <div className="topnav">
         <div className="nav-logo-container">
-          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
+          <Link to="/feed">
+            <img src="/Nav-Logo-Profile.svg" alt="Nav Logo" className="nav-logo" />
+          </Link>
         </div>
         <div className="nav-links">
           <Link to="/feed">Feed</Link>
