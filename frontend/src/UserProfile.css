@@ -204,8 +204,7 @@ body.user-profile-page {
 .dreams-feed {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 15px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -215,13 +214,13 @@ body.user-profile-page {
   background: #ffffff;
   padding: 40px 40px;
   border: 1px solid #ddd;
-  border-radius: 20px;
+  border-radius: 12px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   text-align: left;
 }
 

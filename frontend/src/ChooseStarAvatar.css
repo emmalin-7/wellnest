@@ -1,12 +1,53 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #fffef6;
+}
+
 .choose-star-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
-  background-color: #fefdf6;
+  background-color: #fffef6;
   font-family: sans-serif;
+  padding: 80px 20px;
+}
+
+.welcome-logo {
+  width: 200px;
+  margin-bottom: 0px;
+}
+
+.welcome-title {
+  align-self: stretch;
+  color: #000;
+  text-align: center;
+  font-family: "Cooper Lt BT";
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.welcome-description {
+  color: #000;
+  text-align: center;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  margin: 10px 0 0px 0;
+  max-width: 800px;
+}
+
+.welcome-description strong {
+  font-weight: 700;
 }
 
 .choose-star-note {
@@ -24,11 +65,23 @@
 .stars-row {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.star-subtitle {
+  color: #000;
+  text-align: center;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 20px;
 }
 
 .star-icon {
-  width: 60px;
+  width: 140px;
   transition: transform 0.2s ease;
   cursor: pointer;
 }

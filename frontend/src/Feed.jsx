@@ -17,6 +17,13 @@ function Feed() {
   const currentUserId = JSON.parse(localStorage.getItem('user'))?.id;
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.body.classList.add('feed-body');
+    return () => {
+      document.body.classList.remove('feed-body');
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
     navigate('/login');

@@ -29,9 +29,14 @@ function ChooseStarAvatar() {
   };
 
   return (
-    <div className="star-select-container">
-      <p className="choose-star-note">You can only choose once. Pick your favorite star!</p>
-      <h2 className="choose-star-title">Choose Your Star Color</h2>
+    <div className="choose-star-container">
+      <img src="/Welcome-Logo.svg" alt="Welcome Logo" className="welcome-logo" />
+      <h1 className="welcome-title">Welcome to Wellnest!</h1>
+      <p className="welcome-description">
+        We're so glad you're here! ✨ Wellnest is your new cozy corner to track your sleep, record your dreams, and connect with friends.
+        <br /><br />
+        Before we get started, let's pick your avatar—your little sleep companion on this journey. <strong>Choose wisely! You can only pick once, and you won't be able to change it later.</strong>
+      </p>
       <div className="stars-row">
         {colors.map(color => (
           <img
@@ -43,6 +48,7 @@ function ChooseStarAvatar() {
           />
         ))}
       </div>
+      <p className="star-subtitle">Click to select!</p>
     </div>
   );
 }

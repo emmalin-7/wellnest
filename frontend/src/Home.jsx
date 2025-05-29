@@ -306,7 +306,7 @@ function Home() {
               <Bar data={chartData} options={chartOptions} />
             </div>
 
-            <h2 className="sleep-log-title">🌙 Today's Sleep Log:</h2>
+            <h2 className="sleep-log-title">🌙  Today's Sleep Log:</h2>
             <div className="card dreams-card combined-dream-card">
               {hasPostedToday ? (
                 <p className="already-posted-message">

@@ -62,8 +62,11 @@ html, body {
 }
 
 body.home-page {
-  background-color: #f3f3fa;
+  background: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 30%, #fee6e7 50%, #c7defd 100%);
   color: #ffffff;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 * {

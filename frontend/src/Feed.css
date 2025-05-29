@@ -15,13 +15,11 @@
   font-size: 24px;
 }
 
-html, body {
+body.feed-body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background-color: #e9f3ff;
-  font-family: sans-serif;
-  overflow-y: auto; 
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 20%, #EAF3FF 50%, #E4F0FF 100%);
 }
 
 .feed-page {
@@ -29,7 +27,6 @@ html, body {
   padding: 0;
   min-height: 100vh;
   width: 100vw;
-  background-color: #f9f9ff;
   font-family: sans-serif;
   overflow-y: auto;
 }
