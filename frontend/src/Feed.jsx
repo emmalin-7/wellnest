@@ -89,13 +89,7 @@ function Feed() {
         content: e.target.content.value
       });
       setShowCommentPopup(true);
-      setDreams((prev) =>
-        prev.map((entry) =>
-          entry._id === dreamId
-            ? { ...entry, comments: [...entry.comments, { user, content: e.target.content.value }] }
-            : entry
-        )
-      );
+      await fetchPublicDreams();
 
       e.target.reset();
       
