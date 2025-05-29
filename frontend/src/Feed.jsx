@@ -183,7 +183,7 @@ function Feed() {
               <div>
                 {dream.comments.map((comment, idx) => (
                   <div key={idx}>
-                    <div className="comment-header"> {comment.user?.name}</div>
+                    <div className="comment-header"> {comment.user?.name||'unknown user'}</div>
                     <div>{comment.content}</div>
                   </div>
                 ))}
