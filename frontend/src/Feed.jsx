@@ -9,6 +9,7 @@ function Feed() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState('content');
   const [hourSearch, setHourSearch] = useState('');
+  const [userSearch, setUserSearch] = useState('');
   const [showLikePopup, setShowLikePopup] = useState(false);
   const [likePopupMessage, setLikePopupMessage] = useState('');
   const [showCommentPopup, setShowCommentPopup] = useState(false);
@@ -30,6 +31,9 @@ function Feed() {
       if (searchMode === 'hours' && hourSearch.trim()) {
         params.hours = hourSearch;
       }
+      if (searchMode === 'user' && userSearch.trim()) {
+      params.userSearch = userSearch;
+    }
 
       const res = await axios.get('/api/dreams', { params });
 
@@ -148,6 +152,15 @@ function Feed() {
               />
               <span>Hours</span>
             </label>
+            <label className="search-option">
+              <input
+                type="radio"
+                value="user"
+                checked={searchMode === 'user'}
+                onChange={() => setSearchMode('user')}
+              />
+              <span>User</span>
+            </label>
           </div>
         </div>
 
@@ -171,6 +184,15 @@ function Feed() {
                 placeholder="Enter hours of sleep"
                 value={hourSearch}
                 onChange={(e) => setHourSearch(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+              />
+            )}
+            {searchMode === 'user' && (
+              <input
+                type="text"
+                placeholder="Enter username"
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
               />
             )}
