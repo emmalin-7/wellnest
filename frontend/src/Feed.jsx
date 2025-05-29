@@ -70,10 +70,13 @@ function Feed() {
       setDreams((prev) =>
         prev.map((entry) =>
           entry._id === dreamId
-            ? { ...entry, comments: [...entry.comments, body] }
+            ? { ...entry, comments: [...entry.comments, { user, content: e.target.content.value }] }
             : entry
         )
       );
+
+      e.target.reset();
+      
     } catch (error) {
       console.error(error);
       alert(error.response.data);
