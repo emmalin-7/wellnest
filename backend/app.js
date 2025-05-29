@@ -56,8 +56,19 @@ app.post("/login", (req, res) => {
 
 // creating users into database
 app.post('/register', (req, res) => {
+  const { password } = req.body;
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$/;
+
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({
+      error: 'Password must be at least 10 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    });
+  }
+
   const salt = bcrypt.genSaltSync(10);
-  req.body.password = bcrypt.hashSync(req.body.password, salt)
+  req.body.password = bcrypt.hashSync(password, salt);
+
   UserModel.create(req.body)
     .then(user => res.json(user))
     .catch(err => res.status(400).json(err));

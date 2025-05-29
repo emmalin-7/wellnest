@@ -201,3 +201,9 @@ form {
   text-underline-position: from-font;
   margin-left: 0.5rem;
 }
+
+.password-requirements {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+}
