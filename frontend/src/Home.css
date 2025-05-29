@@ -136,7 +136,7 @@ body.home-page {
 }
 
 .home-chart-card {
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 20px;
   border-radius: 12px;
   background-color: #ffffff;
@@ -432,7 +432,7 @@ button:hover {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-bottom:10px;
+  margin-bottom:20px;
   margin-top: 60px;
   text-align: left;
   width: 100%;

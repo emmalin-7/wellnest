@@ -311,7 +311,7 @@ function Home() {
               {hasPostedToday ? (
                 <p className="already-posted-message">
                   <img src="/Moon.svg" alt="Moon" />
-                  You've logged your dream sleep for the day—nice!
+                  You've logged your sleep and dream for the day—nice!
                 </p>
               ) : (
                 <>
