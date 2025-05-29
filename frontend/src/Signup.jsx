@@ -11,12 +11,23 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$/;
+
+    if (!passwordRegex.test(password)) {
+      alert('Password must be at least 10 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.');
+      return;
+    }
+
     axios.post('http://localhost:5001/register', { name, email, password })
       .then(result => {
         console.log(result);
         navigate('/login', { state: { fromRegistration: true } });
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        alert(err.response?.data?.error || 'Registration failed. Please try again.');
+      });
   };
 
   return (
@@ -66,6 +77,9 @@ function Signup() {
                   required
                 />
               </div>
+              <small className="password-requirements">
+                Password must be at least 10 characters and include uppercase, lowercase, number, and special character.
+              </small>
 
               <button type="submit">Register</button>
             </form>

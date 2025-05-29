@@ -48,7 +48,7 @@ function Leaderboard() {
       const rank = totalUsers - bottom10.length + index + 1;
       return (
         <>
-          🔻 {rank}
+          🔻 {-10 + index + 1}
         </>
       );
     }
@@ -102,8 +102,8 @@ function Leaderboard() {
                 </div>
                 <div className="user-name">{entry._id?.name || 'Unknown User'}</div>
                 <div className="sleep-stats">
-                  <span className="sleep-label">Total Sleep:</span>
-                  <span className="sleep-hours">{entry.totalHours?.toFixed(1) ?? 0} hrs</span>
+                  <span className="sleep-label">Avg Sleep:</span>
+                  <span className="sleep-hours">{entry.avg?.toFixed(2) ?? 0} hrs/wk</span>
                 </div>
               </div>
             ))

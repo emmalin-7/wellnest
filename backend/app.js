@@ -56,8 +56,19 @@ app.post("/login", (req, res) => {
 
 // creating users into database
 app.post('/register', (req, res) => {
+  const { password } = req.body;
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$/;
+
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({
+      error: 'Password must be at least 10 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    });
+  }
+
   const salt = bcrypt.genSaltSync(10);
-  req.body.password = bcrypt.hashSync(req.body.password, salt)
+  req.body.password = bcrypt.hashSync(password, salt);
+
   UserModel.create(req.body)
     .then(user => res.json(user))
     .catch(err => res.status(400).json(err));
@@ -224,21 +235,61 @@ app.get('/api/leaderboard', async (req, res) => {
       date: { $gte: weekAgoStr },
       hours: { $gt: 0 }
     });
+    if (recentCount >= 10) {
+      // Use 7-day average logic
+      const dates = [...Array(7)].map((_, i) => {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        return d.toISOString().slice(0, 10);
+      });
+    
+      const users = await UserModel.find({}, '_id name');
+      const userMap = {};
+      users.forEach(user => {
+        userMap[user._id.toString()] = { name: user.name, daily: {} };
+      });
 
-    const matchCondition = recentCount >= 10
-      ? { date: { $gte: weekAgoStr }, hours: { $gt: 0 } }
-      : { hours: { $gt: 0 } };
+      const dreams = await DreamEntry.find({
+        date: { $in: dates }
+      });
 
-    const leaderboardData = await DreamEntry.aggregate([
-      { $match: matchCondition },
-      {
-        $group: {
-          _id: "$user",
-          totalHours: { $sum: "$hours" }
+      for (const dream of dreams) {
+        const userId = dream.user.toString();
+        if (userMap[userId]) {
+          userMap[userId].daily[dream.date] = (userMap[userId].daily[dream.date] || 0) + (dream.hours || 0);
         }
-      },
-      { $sort: { totalHours: -1 } }
-    ]);
+      }
+
+      const userAvgs = Object.entries(userMap)
+      .filter(([_, { daily }]) => Object.keys(daily).length > 0)
+      .map(([id, { name, daily }]) => {
+        const total = dates.reduce((sum, date) => sum + (daily[date] || 0), 0);
+        const avg = total / 7;
+        return { _id: { _id: id, name }, avg };
+      });
+
+      userAvgs.sort((a, b) => b.avg - a.avg);
+      const top10 = userAvgs.slice(0, 10);
+      const bottom10 = userAvgs.slice(-10).reverse();
+
+      res.json({ top10, bottom10, totalUsers: userAvgs.length, fallback: false });
+
+    } else {
+      const matchCondition = { hours: { $gt: 0 } };
+      // const matchCondition = recentCount >= 10
+      //   ? { date: { $gte: weekAgoStr }, hours: { $gt: 0 } }
+      //   : { hours: { $gt: 0 } };
+
+      const leaderboardData = await DreamEntry.aggregate([
+        { $match: matchCondition },
+        {
+          $group: {
+            _id: "$user",
+            totalHours: { $sum: "$hours" }
+          }
+        },
+        { $sort: { totalHours: -1 } }
+      ]);
 
     // Populate user names
     const populated = await UserModel.populate(leaderboardData, { path: '_id', select: 'name' });
@@ -246,7 +297,8 @@ app.get('/api/leaderboard', async (req, res) => {
     const top10 = populated.slice(0, 10);
     const bottom10 = populated.slice(-10).reverse();
 
-    res.json({ top10, bottom10, fallback: recentCount < 10 });
+    res.json({ top10, bottom10, fallback: recentCount < 10 })
+    };
   } catch (err) {
     console.error("Leaderboard route error:", err);
     res.status(500).json({ error: "Leaderboard route failed" });
