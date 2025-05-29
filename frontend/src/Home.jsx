@@ -67,6 +67,8 @@ function Home() {
       setSleepHours('');
       fetchDreams();
       fetchSleepData();
+      setHasPostedToday(true);
+      localStorage.setItem('lastPostedDate', today);
     } catch (err) {
       console.error('Failed to post dream:', err);
     }
@@ -140,6 +142,23 @@ function Home() {
   useEffect(() => {
     fetchSleepData();
     fetchDreams();
+  }, []);
+
+  useEffect(() => {
+    const checkDate = () => {
+      const todayStr = new Date().toISOString().split('T')[0];
+      const lastPostedDate = localStorage.getItem('lastPostedDate');
+      
+      if (lastPostedDate !== todayStr) {
+        setHasPostedToday(false);
+        localStorage.setItem('lastPostedDate', todayStr);
+      }
+    };
+
+    checkDate();
+    const intervalId = setInterval(checkDate, 60000);
+    
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -315,69 +334,76 @@ function Home() {
               )}
             </div>
 
-            <div className="search-toggle">
-              <span>Search by:</span> 
-              <label className="search-option">
-                <input
-                  type="radio"
-                  value="content"
-                  checked={searchMode === 'content'}
-                  onChange={() => setSearchMode('content')}
-                />
-                <span>Content</span>
-              </label>
-              <label className="search-option">
-                <input
-                  type="radio"
-                  value="hours"
-                  checked={searchMode === 'hours'}
-                  onChange={() => setSearchMode('hours')}
-                />
-                <span>Hours</span>
-              </label>
-              <label className="search-option">
-                <input
-                  type="radio"
-                  value="date"
-                  checked={searchMode === 'date'}
-                  onChange={() => setSearchMode('date')}
-                />
-                <span>Date</span>
-              </label>
-            </div>
-              
-
-
-            <div className="search-bar">
-              {searchMode === 'content' && (
-                <input
-                  type="text"
-                  placeholder="Search dreams..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-                />
-              )}
-              {searchMode === 'hours' && (
-                <input
-                  type="number"
-                  placeholder="Search by hours"
-                  value={sleepSearch}
-                  onChange={(e) => setSleepSearch(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-                />
-              )}
-              {searchMode === 'date' && (
-                <input
-                  type="date"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-                />
-              )}
-              <button onClick={fetchDreams}>Search</button>
-            </div>
+            <h2 className="dream-journal-title">💭 Your Dream Journal</h2>
             
+            {/* search mode toggle bar */}
+            <div className="search-toggle">
+              <p className="search-label">Search by:</p>
+              <div className="search-options">
+                <label className="search-option">
+                  <input
+                    type="radio"
+                    value="content"
+                    checked={searchMode === 'content'}
+                    onChange={() => setSearchMode('content')}
+                  />
+                  <span>Content</span>
+                </label>
+                <label className="search-option">
+                  <input
+                    type="radio"
+                    value="hours"
+                    checked={searchMode === 'hours'}
+                    onChange={() => setSearchMode('hours')}
+                  />
+                  <span>Hours</span>
+                </label>
+                <label className="search-option">
+                  <input
+                    type="radio"
+                    value="date"
+                    checked={searchMode === 'date'}
+                    onChange={() => setSearchMode('date')}
+                  />
+                  <span>Date</span>
+                </label>
+              </div>
+            </div>
+
+            {/* search bar */}
+            <div className="search-section">
+              <p className="search-description">Search through dreams</p>
+              <div className="search-bar">
+                <img src="/Search.svg" alt="Search" className="search-icon" />
+                {searchMode === 'content' && (
+                  <input
+                    type="text"
+                    placeholder="Try keywords like 'flying' or 'nightmare'"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                  />
+                )}
+                {searchMode === 'hours' && (
+                  <input
+                    type="number"
+                    placeholder="Enter hours of sleep"
+                    value={sleepSearch}
+                    onChange={(e) => setSleepSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                  />
+                )}
+                {searchMode === 'date' && (
+                  <input
+                    type="date"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                  />
+                )}
+                <button onClick={fetchDreams} className="search-button">Search</button>
+              </div>
+            </div>
 
             <div className="dreams-feed">
               {Array.isArray(dreams) && dreams.length > 0 ? (

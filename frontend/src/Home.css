@@ -62,7 +62,7 @@ html, body {
 }
 
 body.home-page {
-  background-color: #f8f5ff;
+  background-color: #f3f3fa;
   color: #ffffff;
 }
 
@@ -231,13 +231,25 @@ button:hover {
 }
 
 .search-bar {
-  grid-column: 1 / span 2;
   display: flex;
   gap: 10px;
+  margin: 10px 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.search-bar input[type="text"] {
+.search-bar input[type="text"],
+.search-bar input[type="number"],
+.search-bar input[type="date"] {
   flex: 1;
+  font-family: "DM Sans";
+  max-width: 600px;
+  height: 36px;
+  margin: 0;
 }
 
 .search-toggle {
@@ -291,6 +303,7 @@ button:hover {
   align-items: center;
   width: 100%;
   margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 .home-logo {
@@ -446,4 +459,87 @@ button:hover {
   height: 16px;
   accent-color: #c4bedd;
   cursor: pointer;
+}
+
+.dream-journal-title {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+  padding-left: 20px;
+}
+
+.search-label {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+}
+
+.search-description {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: -30px;
+  margin: 0;
+}
+
+.search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+.search-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "DM Sans";
+}
+
+.search-button {
+  background: #c4bedd;
+  color: #000;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 9999px;
+  font-family: "Cooper Lt BT";
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 36px;
+  box-sizing: border-box;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.search-button:hover {
+  background-color: #b0a6d7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.home-user-star {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
 }
