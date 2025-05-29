@@ -23,6 +23,8 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sleepSearch, setSleepSearch] = useState('');
   const [searchMode, setSearchMode] = useState('content');
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [dreamToDelete, setDreamToDelete] = useState(null);
 
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user?.id;
@@ -124,8 +126,6 @@ function Home() {
   };
 
   const handleDelete = async (dreamId) => {
-    if (!window.confirm('Delete this dream?')) return;
-
     try {
       await axios.delete(`/api/dreams/${dreamId}`, {
         params: { user: userId }
@@ -137,6 +137,24 @@ function Home() {
       console.error('Failed to delete dream:', err);
       alert('Could not delete dream.');
     }
+  };
+
+  const handleDeleteClick = (dreamId) => {
+    setDreamToDelete(dreamId);
+    setShowDeletePopup(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (dreamToDelete) {
+      await handleDelete(dreamToDelete);
+      setShowDeletePopup(false);
+      setDreamToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false);
+    setDreamToDelete(null);
   };
 
   useEffect(() => {
@@ -408,19 +426,27 @@ function Home() {
             <div className="dreams-feed">
               {Array.isArray(dreams) && dreams.length > 0 ? (
                 dreams.map((d, i) => (
-                  <div key={i} className="dream-entry">
-                    <div className="post-header-with-trash">
-                      <strong>{d?.date || 'No date'}</strong>
-                      <button
-                        className="trash-button"
-                        title="Delete"
-                        onClick={() => handleDelete(d._id)}
-                      >
-                        🗑️
-                      </button>
+                  <div key={i} className="home-dream-entry">
+                    <div className="dream-header">
+                      <strong>
+                        {d?.date ? new Date(d.date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric'
+                        }) : 'No date'}
+                      </strong>
+                      {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
                     </div>
-                    {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
                     <p>{d?.content || 'No content'}</p>
+                    <button
+                      className="trash-button"
+                      title="Delete"
+                      onClick={() => handleDeleteClick(d._id)}
+                    >
+                      <img src="/Trash.svg" alt="Delete" />
+                      Delete entry
+                    </button>
                   </div>
                 ))
               ) : (
@@ -430,6 +456,19 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {showDeletePopup && (
+        <div className="delete-popup">
+          <div className="delete-popup-content">
+            <img src="/Moon.svg" alt="Moon" className="moon-icon" />
+            <p>Are you sure you want to delete this entry?</p>
+            <div className="delete-popup-buttons">
+              <button className="cancel" onClick={handleCancelDelete}>Cancel</button>
+              <button onClick={handleConfirmDelete}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
