@@ -130,8 +130,13 @@ html, body {
 }
 
 .chart-card {
-  grid-column: 2 / span 1;
+  margin: 40px 0;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
+
 
 .dreams-card {
   grid-column: 1 / span 2;
