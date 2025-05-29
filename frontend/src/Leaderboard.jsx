@@ -45,7 +45,7 @@ function Leaderboard() {
         </>
       );
     } else {
-      const rank = totalUsers - index;
+      const rank = totalUsers - bottom10.length + index + 1;
       return (
         <>
           🔻 {rank}
@@ -58,11 +58,12 @@ function Leaderboard() {
     <>
       {/* nav bar */}
       <div className="topnav">
-        <div className="left-links">
+        <div className="nav-logo-container">
+          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
+        </div>
+        <div className="nav-links">
           <Link to="/feed">Feed</Link>
           <Link to="/leaderboard">Leaderboards</Link>
-        </div>
-        <div className="right-link">
           <Link to="/home">Profile</Link>
           <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>

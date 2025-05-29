@@ -2,40 +2,70 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: white;
+  background-color: #e9f3ff;
   font-family: sans-serif;
   overflow-y: auto; 
 }
 
+.feed-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f4f9ff;
+  font-family: sans-serif;
+  overflow-y: auto;
+}
+
 .topnav {
-  background-color: #333;
+  overflow: hidden;
+  padding: 0.7rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  height: 60px;
+  width: 100vw;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Cooper Lt BT", serif;
+  box-sizing: border-box;
 }
 
-.left-links,
-.right-link {
+.nav-logo-container {
   display: flex;
   align-items: center;
 }
 
-.topnav a {
-  color: white;
+.nav-logo {
+  width: 140px;
+  height: 60px;
+  margin-right: 4px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a,
+.logout-link {
+  color: #000000;
   text-decoration: none;
-  padding: 16px;
-  font-size: 17px;
+  font-family: "Cooper Lt BT", serif;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
 }
 
-.topnav a:hover {
-  background-color: #575757;
+.nav-links a:hover,
+.logout-link:hover {
+  color: #575757;
+  background-color: transparent;
 }
 
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
+.nav-links a.active {
+  color: #000000;
+  background-color: transparent;
+  font-weight: bold;
 }
 
 .feed-container {
@@ -167,7 +197,7 @@ html, body {
 .search-section {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 20px auto;
   max-width: 800px;
   min-width: 800px;
   padding: 0 28px;
@@ -260,7 +290,7 @@ html, body {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  margin: 20px 0px 20px;
+  margin: 20px auto;
   max-width: 800px;
   min-width: 800px;
   padding: 0 28px;
@@ -538,4 +568,10 @@ html, body {
 
 .delete-comment:hover {
   color: #ff4d4d;
+}
+
+.feed-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
