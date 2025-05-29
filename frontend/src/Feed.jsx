@@ -118,7 +118,9 @@ function Feed() {
       {/* nav bar */}
       <div className="topnav">
         <div className="nav-logo-container">
-          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
+          <Link to="/feed">
+            <img src="/Nav-Logo-Feed.svg" alt="Nav Logo" className="nav-logo" />
+          </Link>
         </div>
         <div className="nav-links">
           <Link to="/feed" className="feed-link">Feed</Link>

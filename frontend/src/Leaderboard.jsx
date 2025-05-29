@@ -59,7 +59,9 @@ function Leaderboard() {
       {/* nav bar */}
       <div className="topnav">
         <div className="nav-logo-container">
-          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
+          <Link to="/feed">
+            <img src="/Nav-Logo-Leaderboard.svg" alt="Nav Logo" className="nav-logo" />
+          </Link>
         </div>
         <div className="nav-links">
           <Link to="/feed">Feed</Link>
@@ -72,7 +74,7 @@ function Leaderboard() {
       <div className="leaderboard-container">
         <div className="leaderboard-header">
           <img src="/Wellnest-Logo-Trophy.svg" alt="Wellnest Trophy Logo" className="leaderboard-logo" />
-          <h1 className="leaderboard-title">Leaderboard</h1>
+          <h1 className="leaderboard-title">🏆 Leaderboard</h1>
           <p className="leaderboard-subtitle">See who's resting best (and who needs a nap).</p>
           <div className="search-bar">
             <button onClick={() => setView('top')}>📈 Top 10</button>

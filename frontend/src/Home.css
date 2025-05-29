@@ -61,6 +61,11 @@ html, body {
   overflow-y: auto; 
 }
 
+body.home-page {
+  background-color: #f8f5ff;
+  color: #ffffff;
+}
+
 * {
   box-sizing: border-box;
   transition: all 0.2s ease;
