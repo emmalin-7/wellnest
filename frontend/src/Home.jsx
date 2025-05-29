@@ -245,7 +245,12 @@ function Home() {
 
       <div className="home-container">
         <div className="home-content">
-          <img src="/Wellnest-Logo-Profile.svg" alt="Wellnest Logo" className="home-logo" />
+          <img
+            src={`/Avatar-${user?.starColor || 'Yellow'}.svg`}
+            alt="User Star"
+            className="home-user-star"
+          />
+
           <div className="date-label">
             {new Date().toLocaleDateString('en-US', {
               weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'

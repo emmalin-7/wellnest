@@ -8,6 +8,8 @@ import Home from './Home';
 import Leaderboard from './Leaderboard';
 import Feed from './Feed';
 import UserProfile from './UserProfile';
+import ChooseStarAvatar from './ChooseStarAvatar';
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/profile/:userId" element={<UserProfile />} />
+        <Route path="/choose-star" element={<ChooseStarAvatar />} />
         <Route path="*" element={<div style={{ padding: 40 }}><h1>404 - Page Not Found</h1></div>} />
       </Routes>
     </Router>

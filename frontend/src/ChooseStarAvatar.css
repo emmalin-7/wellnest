@@ -1,0 +1,38 @@
+.choose-star-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #fefdf6;
+  font-family: sans-serif;
+}
+
+.choose-star-note {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.choose-star-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.star-icon {
+  width: 60px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.star-icon:hover {
+  transform: scale(1.5);
+}

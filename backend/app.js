@@ -38,7 +38,9 @@ app.post("/login", (req, res) => {
             user: {
               email: account.email,
               id: account._id,
-              name: account.name
+              name: account.name,
+              hasChosenStar: account.hasChosenStar || false,
+              starColor: account.starColor || null
             }
           });
         } else {
@@ -205,7 +207,7 @@ app.get('/api/dreams', async (req, res) => {
 
     const dreamsQuery = DreamEntry.find(filter)
     .sort({ date: -1, created: -1 })
-    .populate('user', 'name')
+    .populate('user', 'name starColor')
     .populate('comments.user', 'name email');
 
     let dreams = await dreamsQuery.exec();
@@ -336,6 +338,29 @@ app.get('/api/users/:userId', async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user info' });
+  }
+});
+
+// star color choosing TEEHEE
+
+app.put('/api/users/:userId/star', async (req, res) => {
+  const { userId } = req.params;
+  const { starColor } = req.body;
+
+  if (!starColor) return res.status(400).json({ error: 'starColor is required' });
+
+  try {
+    const user = await UserModel.findByIdAndUpdate(userId, {
+      starColor,
+      hasChosenStar: true
+    }, { new: true });
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    res.json(user);
+  } catch (err) {
+    console.error('Error updating star color:', err);
+    res.status(500).json({ error: 'Failed to update star color' });
   }
 });
 

@@ -236,7 +236,11 @@ function Feed() {
             <div key={i} className="feed-dream-post">
               <div className="post-header">
                 <div className="post-user-info">
-                  <img src="/Star.svg" alt="Profile" className="profile-pic" />
+                  <img
+                    src={`/Avatar-${dream.user.starColor || 'Yellow'}.svg`}
+                    alt="Profile"
+                    className="profile-pic"
+                  />
                   <div className="user-details">
                     <Link to={`/profile/${typeof dream.user === 'object' ? dream.user._id : dream.user}`} className="user-name">
                       {typeof dream.user === 'object' ? dream.user.name : dream.user}

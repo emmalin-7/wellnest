@@ -30,11 +30,20 @@ function Login() {
         console.log('Login response:', result.data);
 
         if (result.data.message === "Success") {
-          // store each user for local database, dream and sleep logs
-          localStorage.setItem('user', JSON.stringify(result.data.user));
+          const user = result.data.user;
 
-          // go to dashboard
-          navigate('/home');
+          // store each user for local database, dream and sleep logs
+
+          localStorage.setItem('user', JSON.stringify(user));
+
+          if (!user.hasChosenStar) {
+            // if no star color, make them choose
+            navigate('/choose-star');
+          } else {
+            // go to dashboard IF USER HAS CHOSEN STAR (basically first login check)
+            navigate('/home');
+          }
+
         } else {
           alert(result.data.message);
         }
