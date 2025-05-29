@@ -32,8 +32,11 @@ function Feed() {
         params.hours = hourSearch;
       }
       if (searchMode === 'user' && userSearch.trim()) {
-      params.userSearch = userSearch;
-    }
+        params.userSearch = userSearch;
+      }
+      if (searchMode === 'date' && searchTerm.trim()) {
+        params.date = searchTerm;
+      }
 
       const res = await axios.get('/api/dreams', { params });
 
@@ -161,6 +164,15 @@ function Feed() {
               />
               <span>User</span>
             </label>
+            <label className="search-option">
+              <input
+                type="radio"
+                value="date"
+                checked={searchMode === 'date'}
+                onChange={() => setSearchMode('date')}
+              />
+              <span>Date</span>
+            </label>
           </div>
         </div>
 
@@ -194,6 +206,14 @@ function Feed() {
                 value={userSearch}
                 onChange={(e) => setUserSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && fetchPublicDreams()}
+              />
+            )}
+            {searchMode === 'date' && (
+              <input
+                type="date"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
               />
             )}
             <button onClick={fetchPublicDreams} className="feed-search-button">Search</button>

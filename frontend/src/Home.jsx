@@ -103,6 +103,10 @@ function Home() {
       if (searchMode === 'hours' && sleepSearch.trim()) {
         params.hours = sleepSearch;
       }
+      if (searchMode === 'date' && searchTerm.trim()) {
+        params.date = searchTerm;
+      }
+
 
       const res = await axios.get('/api/dreams', { params });
       setDreams(res.data);
@@ -258,7 +262,18 @@ function Home() {
               />
               <span>Hours</span>
             </label>
+            <label className="search-option">
+              <input
+                type="radio"
+                value="date"
+                checked={searchMode === 'date'}
+                onChange={() => setSearchMode('date')}
+              />
+              <span>Date</span>
+            </label>
           </div>
+            
+
 
           <div className="search-bar">
             {searchMode === 'content' && (
@@ -279,8 +294,17 @@ function Home() {
                 onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
               />
             )}
+            {searchMode === 'date' && (
+              <input
+                type="date"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+              />
+            )}
             <button onClick={fetchDreams}>Search</button>
           </div>
+          
 
           <div className="dreams-feed">
             {Array.isArray(dreams) && dreams.length > 0 ? (
