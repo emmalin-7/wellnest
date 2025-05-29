@@ -9,6 +9,10 @@ function Feed() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState('content');
   const [hourSearch, setHourSearch] = useState('');
+  const [showLikePopup, setShowLikePopup] = useState(false);
+  const [likePopupMessage, setLikePopupMessage] = useState('');
+  const [showCommentPopup, setShowCommentPopup] = useState(false);
+  const [showEmptyCommentPopup, setShowEmptyCommentPopup] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -45,7 +49,8 @@ function Feed() {
     const userId = user?.id;
     try {
       await axios.post('/api/dreams/' + dreamId + '/like', { user: userId });
-      alert('dream successfully liked');
+      setLikePopupMessage('Successfully liked post!');
+      setShowLikePopup(true);
       setDreams((prev) =>
         prev.map((entry) =>
           entry._id === dreamId
@@ -54,7 +59,8 @@ function Feed() {
         )
       );
     } catch (error) {
-      alert(error.response.data);
+      setLikePopupMessage('You already liked this post!');
+      setShowLikePopup(true);
     }
   };
 
@@ -63,10 +69,15 @@ function Feed() {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
 
+    if (!e.target.content.value.trim()) {
+      setShowEmptyCommentPopup(true);
+      return;
+    }
+
     try {
       const body = { user: userId, content: e.target.content.value };
       await axios.post('/api/dreams/' + dreamId + '/comment', body);
-      alert('dream successfully commented on');
+      setShowCommentPopup(true);
       setDreams((prev) =>
         prev.map((entry) =>
           entry._id === dreamId
@@ -169,47 +180,87 @@ function Feed() {
 
         {Array.isArray(dreams) && dreams.length > 0 ? (
           dreams.map((dream, i) => (
-            <div key={i} className="dream-post">
+            <div key={i} className="feed-dream-post">
               <div className="post-header">
-                <strong>
-                  <Link to={`/profile/${typeof dream.user === 'object' ? dream.user._id : dream.user}`}>
-                    {typeof dream.user === 'object' ? dream.user.name : dream.user}
-                  </Link>
-                </strong>
-                <span>
-                  <span>
-                    {dream.date?.split('-').join('/')}
-                  </span>
-                </span>
+                <div className="post-user-info">
+                  <img src="/Star.svg" alt="Profile" className="profile-pic" />
+                  <div className="user-details">
+                    <Link to={`/profile/${typeof dream.user === 'object' ? dream.user._id : dream.user}`} className="user-name">
+                      {typeof dream.user === 'object' ? dream.user.name : dream.user}
+                    </Link>
+                    {dream.hours != null && (
+                      <p className="sleep-hours">{dream.hours} hours slept</p>
+                    )}
+                  </div>
+                </div>
+                <span className="post-date">{dream.date?.split('-').join('/')}</span>
               </div>
-              {dream.hours != null && (
-                <p>
-                  <em>{dream.hours} hours of sleep</em>
-                </p>
-              )}
-              <p>{dream.content}</p>
-              <div className="actions">
-                <button className="like-button" onClick={() => handleLike(dream._id)}>♡ Like</button>
-                <span>{dream.likes.length} Likes</span>
+              <p className="dream-content">{dream.content}</p>
+              <div className="like-section">
+                <button 
+                  className="like-button" 
+                  onClick={() => handleLike(dream._id)}
+                  onMouseEnter={(e) => e.currentTarget.querySelector('img').src = '/Red-Heart.svg'}
+                  onMouseLeave={(e) => e.currentTarget.querySelector('img').src = '/Empty-Heart.svg'}
+                >
+                  <img src="/Empty-Heart.svg" alt="Like" className="heart-icon" />
+                  <span className="like-count">{dream.likes.length} {dream.likes.length === 1 ? 'Like' : 'Likes'}</span>
+                </button>
               </div>
-              <div>
+              <form onSubmit={(e) => handleComment(dream._id, e)} className="comment-form">
+                <textarea 
+                  name="content" 
+                  className="comment-input" 
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button className="comment-submit">Post Comment</button>
+              </form>
+              <div className="comments-section">
+                <h3 className="comments-title">Comments:</h3>
                 {dream.comments.map((comment, idx) => (
-                  <div key={idx}>
-                    <button onClick={()=>{handleCommentDelete(dream._id, comment._id)}}>🗑️</button>
-                    <div className="comment-header"> {comment.user?.name||'unknown user'}</div>
-                    <div>{comment.content}</div>
+                  <div key={idx} className="comment">
+                    <div className="comment-header">
+                      <span className="comment-user">{comment.user?.name || 'unknown user'}</span>
+                      <button onClick={() => handleCommentDelete(dream._id, comment._id)} className="delete-comment">🗑️</button>
+                    </div>
+                    <div className="comment-content">{comment.content}</div>
                   </div>
                 ))}
               </div>
-              <form onSubmit={(e) => handleComment(dream._id, e)}>
-                <div>Add a Comment!</div>
-                <textarea name="content"></textarea>
-                <button>↵</button>
-              </form>
             </div>
           ))
         ) : (
           <p className="empty-feed">No public dreams yet.</p>
+        )}
+
+        {showLikePopup && (
+          <div className="like-popup">
+            <div className="like-popup-content">
+              <img src="/Moon.svg" alt="Moon" className="moon-icon" />
+              <p>{likePopupMessage}</p>
+              <button onClick={() => setShowLikePopup(false)}>Okay</button>
+            </div>
+          </div>
+        )}
+
+        {showEmptyCommentPopup && (
+          <div className="like-popup">
+            <div className="like-popup-content">
+              <img src="/Moon.svg" alt="Moon" className="moon-icon" />
+              <p>Oops!<br/>You need to write a comment first.</p>
+              <button onClick={() => setShowEmptyCommentPopup(false)}>Okay</button>
+            </div>
+          </div>
+        )}
+
+        {showCommentPopup && (
+          <div className="like-popup">
+            <div className="like-popup-content">
+              <img src="/Moon.svg" alt="Moon" className="moon-icon" />
+              <p>Comment added!</p>
+              <button onClick={() => setShowCommentPopup(false)}>Okay</button>
+            </div>
+          </div>
         )}
       </div>
     </>
