@@ -28,7 +28,12 @@ function Home() {
 
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user?.id;
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Los_Angeles',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).split(',')[0].split('/').reverse().join('-');
   const [isPublic, setIsPublic] = useState(false);
 
   const [hasPostedToday, setHasPostedToday] = useState(false);
@@ -115,7 +120,12 @@ function Home() {
       const res = await axios.get('/api/dreams', { params });
       setDreams(res.data);
 
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = new Date().toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).split(',')[0].split('/').reverse().join('-');
       const hasPosted = res.data.some(d => d.date === todayStr);
       setHasPostedToday(hasPosted);
     } catch (err) {
@@ -429,12 +439,15 @@ function Home() {
                   <div key={i} className="home-dream-entry">
                     <div className="dream-header">
                       <strong>
-                        {d?.date ? new Date(d.date).toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric'
-                        }) : 'No date'}
+                        {d?.created
+                          ? new Date(d.created).toLocaleDateString('en-US', {
+                            timeZone: 'America/Los_Angeles',
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })
+                          : 'No date'}
                       </strong>
                       {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
                     </div>

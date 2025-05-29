@@ -258,11 +258,14 @@ function Feed() {
                   </div>
                 </div>
                 <span className="post-date">
-                  {dream.date ? new Date(dream.date).toLocaleDateString('en-US', {
-                    month: 'numeric',
-                    day: 'numeric',
-                    year: 'numeric'
-                  }) : ''}
+                  {dream.created
+                    ? new Date(new Date(dream.created).getTime() - new Date(dream.created).getTimezoneOffset() * 60000)
+                        .toLocaleDateString('en-US', {
+                          month: 'numeric',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })
+                    : ''}
                 </span>
               </div>
               <p className="dream-content">{dream.content}</p>
