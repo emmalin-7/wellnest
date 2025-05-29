@@ -175,18 +175,26 @@ app.delete('/api/dreams/:dreamId/comments/:commentId', async (req, res) => {
 
 app.get('/api/dreams', async (req, res) => {
   try {
-    const { user , search, isPublic, hours } = req.query;
+    const { user, search, isPublic, hours, userSearch } = req.query;
 
     const filter = {};
     if (user) filter.user = user;
     if (isPublic === 'true') filter.isPublic = true;
     if (search) filter.content = { $regex: new RegExp(search, 'i') };
     if (hours) filter.hours = Number(hours);
+    const dreamsQuery = DreamEntry.find(filter)
+    .sort({ date: -1, created: -1 })
+    .populate('user', 'name')
+    .populate('comments.user', 'name email');
 
-    const dreams = await DreamEntry.find(filter)
-      .sort({ date: -1, created: -1 })
-      .populate('user', 'name')
-      .populate('comments.user', 'name email');
+    let dreams = await dreamsQuery.exec();
+
+    // Post-query filtering by user name
+    if (userSearch) {
+      const regex = new RegExp(userSearch, 'i');
+      dreams = dreams.filter(d => d.user?.name?.match(regex));
+    }
+
 
     res.json(dreams);
   } catch (err) {
