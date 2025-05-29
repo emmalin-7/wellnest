@@ -83,6 +83,15 @@ function Feed() {
     }
   };
 
+  const handleCommentDelete = async (dreamId, commentId) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+
+    await axios.delete('/api/dreams/' + dreamId + '/comments/' + commentId, {
+      data:{user:userId}
+    })
+  }
+
   return (
     <>
       {/* nav bar */}
@@ -186,6 +195,7 @@ function Feed() {
               <div>
                 {dream.comments.map((comment, idx) => (
                   <div key={idx}>
+                    <button onClick={()=>{handleCommentDelete(dream._id, comment._id)}}>🗑️</button>
                     <div className="comment-header"> {comment.user?.name||'unknown user'}</div>
                     <div>{comment.content}</div>
                   </div>
