@@ -162,21 +162,60 @@ function Home() {
       {
         label: 'Hours Slept',
         data: sleepData.map((e) => e.hours),
-        backgroundColor: '#04AA6D',
+        backgroundColor: '#ACA5C7',
       },
     ],
   };
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
-      title: { display: true, text: 'Sleep Hours by Date' }
+      legend: { 
+        display: false,
+        labels: {
+          font: {
+            family: 'DM Sans'
+          }
+        }
+      },
+      title: { 
+        display: true, 
+        text: 'Sleep Hours by Date',
+        font: {
+          family: 'DM Sans',
+          size: 16
+        }
+      }
     },
     scales: {
-      x: { title: { display: true, text: 'Date' } },
+      x: { 
+        title: { 
+          display: true, 
+          text: 'Date',
+          font: {
+            family: 'DM Sans'
+          }
+        },
+        ticks: {
+          font: {
+            family: 'DM Sans'
+          }
+        }
+      },
       y: {
-        title: { display: true, text: 'Hours Slept' },
+        title: { 
+          display: true, 
+          text: 'Hours Slept',
+          font: {
+            family: 'DM Sans'
+          }
+        },
+        ticks: {
+          font: {
+            family: 'DM Sans'
+          }
+        },
         beginAtZero: true,
         max: 24
       }
@@ -204,139 +243,159 @@ function Home() {
         </div>
       </div>
 
-      <div className="dashboard-container">
-        <div className="dashboard-header">
-          <div className="date-section">
-            <span className="date-label">{new Date().toLocaleDateString('en-US', {
+      <div className="home-container">
+        <div className="home-content">
+          <img src="/Wellnest-Logo-Profile.svg" alt="Wellnest Logo" className="home-logo" />
+          <div className="date-label">
+            {new Date().toLocaleDateString('en-US', {
               weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            })}</span>
+            })}
           </div>
-          <div className="profile-icon">👤</div>
+          <h1 className="welcome-title">
+            ✨ Welcome back, <span className="home-user-name">{user?.name || 'User'}</span>
+          </h1>
+          <p className="check-in-message">Let's check in on your sleep and dreams.</p>
         </div>
 
-        <div className="dashboard-content">
-          <div className="card chart-card">
-            <Bar data={chartData} options={chartOptions} />
-          </div>
+        <div className="dashboard-container">
+          <div className="dashboard-content">
+            <h2 className="chart-description">🛌 Your Weekly Sleep Summary</h2>
+            <div className="card chart-card">
+              <Bar data={chartData} options={chartOptions} />
+            </div>
 
-          <div className="card dreams-card combined-dream-card">
-            <div className="card-title">Today's Sleep Log: </div>
-            {hasPostedToday && (
-              <p className="info-text">You've already posted your dream today!</p>
-            )}
-            <input
-              type="number"
-              placeholder="Enter hours slept"
-              value={sleepHours}
-              onChange={(e) => setSleepHours(e.target.value)}
-              className="input-hours"
-              disabled={hasPostedToday}
-            />
-            <textarea
-              value={dreamText}
-              onChange={(e) => setDreamText(e.target.value)}
-              placeholder="Write about your dream..."
-              disabled={hasPostedToday}
-            />
-            <label className="public-checkbox">
-              <input
-                type="checkbox"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-                disabled={hasPostedToday}
-              />
-              Share to Feed
-            </label>
-            <button onClick={submitDream} disabled={hasPostedToday}>
-              {hasPostedToday ? "Already Posted" : "Post Dream"}
-            </button>
-          </div>
+            <h2 className="sleep-log-title">🌙 Today's Sleep Log:</h2>
+            <div className="card dreams-card combined-dream-card">
+              {hasPostedToday ? (
+                <p className="already-posted-message">
+                  <img src="/Moon.svg" alt="Moon" />
+                  You've logged your dream sleep for the day—nice!
+                </p>
+              ) : (
+                <>
+                  <p className="sleep-log-subtitle">How many hours did you sleep last night?</p>
+                  <input
+                    type="number"
+                    placeholder="Enter hours slept"
+                    value={sleepHours}
+                    onChange={(e) => setSleepHours(e.target.value)}
+                    className="input-hours sleep-log-input"
+                    disabled={hasPostedToday}
+                  />
+                  <p className="sleep-log-subtitle">Write about your dream or how well you slept!</p>
+                  <textarea
+                    value={dreamText}
+                    onChange={(e) => setDreamText(e.target.value)}
+                    placeholder="Start typing your dream..."
+                    className="sleep-log-input"
+                    disabled={hasPostedToday}
+                  />
+                  <label className="public-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={isPublic}
+                      onChange={(e) => setIsPublic(e.target.checked)}
+                      disabled={hasPostedToday}
+                    />
+                    Share to Feed
+                  </label>
+                  <sleep-log-button 
+                    onClick={submitDream} 
+                    disabled={hasPostedToday}
+                    className="sleep-log-button"
+                  >
+                    Log entry
+                  </sleep-log-button>
+                </>
+              )}
+            </div>
 
-          <div className="search-toggle">
-            <span>Search by:</span> 
-            <label className="search-option">
-              <input
-                type="radio"
-                value="content"
-                checked={searchMode === 'content'}
-                onChange={() => setSearchMode('content')}
-              />
-              <span>Content</span>
-            </label>
-            <label className="search-option">
-              <input
-                type="radio"
-                value="hours"
-                checked={searchMode === 'hours'}
-                onChange={() => setSearchMode('hours')}
-              />
-              <span>Hours</span>
-            </label>
-            <label className="search-option">
-              <input
-                type="radio"
-                value="date"
-                checked={searchMode === 'date'}
-                onChange={() => setSearchMode('date')}
-              />
-              <span>Date</span>
-            </label>
-          </div>
+            <div className="search-toggle">
+              <span>Search by:</span> 
+              <label className="search-option">
+                <input
+                  type="radio"
+                  value="content"
+                  checked={searchMode === 'content'}
+                  onChange={() => setSearchMode('content')}
+                />
+                <span>Content</span>
+              </label>
+              <label className="search-option">
+                <input
+                  type="radio"
+                  value="hours"
+                  checked={searchMode === 'hours'}
+                  onChange={() => setSearchMode('hours')}
+                />
+                <span>Hours</span>
+              </label>
+              <label className="search-option">
+                <input
+                  type="radio"
+                  value="date"
+                  checked={searchMode === 'date'}
+                  onChange={() => setSearchMode('date')}
+                />
+                <span>Date</span>
+              </label>
+            </div>
+              
+
+
+            <div className="search-bar">
+              {searchMode === 'content' && (
+                <input
+                  type="text"
+                  placeholder="Search dreams..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                />
+              )}
+              {searchMode === 'hours' && (
+                <input
+                  type="number"
+                  placeholder="Search by hours"
+                  value={sleepSearch}
+                  onChange={(e) => setSleepSearch(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                />
+              )}
+              {searchMode === 'date' && (
+                <input
+                  type="date"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
+                />
+              )}
+              <button onClick={fetchDreams}>Search</button>
+            </div>
             
 
-
-          <div className="search-bar">
-            {searchMode === 'content' && (
-              <input
-                type="text"
-                placeholder="Search dreams..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-              />
-            )}
-            {searchMode === 'hours' && (
-              <input
-                type="number"
-                placeholder="Search by hours"
-                value={sleepSearch}
-                onChange={(e) => setSleepSearch(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-              />
-            )}
-            {searchMode === 'date' && (
-              <input
-                type="date"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
-              />
-            )}
-            <button onClick={fetchDreams}>Search</button>
-          </div>
-          
-
-          <div className="dreams-feed">
-            {Array.isArray(dreams) && dreams.length > 0 ? (
-              dreams.map((d, i) => (
-                <div key={i} className="dream-entry">
-                  <div className="post-header-with-trash">
-                    <strong>{d?.date || 'No date'}</strong>
-                    <button
-                      className="trash-button"
-                      title="Delete"
-                      onClick={() => handleDelete(d._id)}
-                    >
-                      🗑️
-                    </button>
+            <div className="dreams-feed">
+              {Array.isArray(dreams) && dreams.length > 0 ? (
+                dreams.map((d, i) => (
+                  <div key={i} className="dream-entry">
+                    <div className="post-header-with-trash">
+                      <strong>{d?.date || 'No date'}</strong>
+                      <button
+                        className="trash-button"
+                        title="Delete"
+                        onClick={() => handleDelete(d._id)}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                    {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
+                    <p>{d?.content || 'No content'}</p>
                   </div>
-                  {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
-                  <p>{d?.content || 'No content'}</p>
-                </div>
-              ))
-            ) : (
-              <p className="empty-feed">No dreams yet.</p>
-            )}
+                ))
+              ) : (
+                <p className="empty-feed">No dreams yet.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

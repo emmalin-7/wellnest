@@ -73,8 +73,9 @@ body.home-page {
 
 .dashboard-container {
   padding: 20px;
-  max-width: 960px;
-  margin: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .dashboard-header {
@@ -90,15 +91,6 @@ body.home-page {
   gap: 10px;
 }
 
-.date-label {
-  font-weight: bold;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
 .change-link {
   font-size: 14px;
   color: #007BFF;
@@ -111,22 +103,22 @@ body.home-page {
 }
 
 .dashboard-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 }
 
 .card {
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 24px;
+  padding: 36px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .card-title {
@@ -137,16 +129,43 @@ body.home-page {
 }
 
 .chart-card {
-  margin: 40px 0;
+  margin: 10px auto;
   padding: 20px;
   border-radius: 12px;
-  background-color: #fafafa;
+  background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
 }
 
+.chart-description {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: -30px;
+  margin: 0;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+  padding-left: 20px;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 360px;
+}
 
 .dreams-card {
-  grid-column: 1 / span 2;
+  width: 100%;
+  max-width: 800px;
 }
 
 .combined-dream-card {
@@ -255,4 +274,176 @@ button:hover {
   color: gray;
   font-style: italic;
   margin-bottom: 0.5rem;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.home-logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+  margin-top: 30px
+}
+
+.date-label {
+  color: #000;
+  text-align: center;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.4px;
+  margin-bottom: 10px;
+}
+
+.welcome-title {
+  align-self: stretch;
+  color: #000;
+  text-align: center;
+  font-family: "Cooper Lt BT";
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+}
+
+.home-user-name {
+  font-style: italic;
+}
+
+.check-in-message {
+  color: #000;
+  text-align: center;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  margin: 10px 0 0 0;
+}
+
+.sleep-log-title {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom:10px;
+  margin-top: 15px;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+  padding-left: 20px;
+}
+
+.sleep-log-subtitle {
+  color: #000;
+  text-align: left;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  margin: 10px 0 0 0;
+}
+
+.sleep-log-input {
+  font-family: "DM Sans";
+}
+
+.sleep-log-input::placeholder {
+  font-family: "DM Sans";
+}
+
+.sleep-log-button {
+  align-self: center;
+  background: #c4bedd;
+  color: #000;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 9999px;
+  font-family: "Cooper Lt BT";
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 36px;
+  box-sizing: border-box;
+  width: 300px;
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sleep-log-button:hover {
+  background-color: #b0a6d7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sleep-log-button:disabled {
+  background-color: #E5E5E5;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.already-posted-message {
+  color: #000;
+  text-align: center;
+  font-family: "DM Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.already-posted-message img {
+  width: 32px;
+  height: 32px;
+}
+
+.public-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "DM Sans";
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.public-checkbox input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #c4bedd;
+  cursor: pointer;
 }
