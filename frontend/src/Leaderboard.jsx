@@ -33,6 +33,13 @@ function Leaderboard() {
       });
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add('leaderboard-page');
+    return () => {
+      document.body.classList.remove('leaderboard-page');
+    };
+  }, []);
+
   const displayedList = view === 'top' ? top10 : bottom10;
   const title = view === 'top' ? 'Top 10 Sleepers' : 'Bottom 10 Sleepers';
 

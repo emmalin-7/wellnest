@@ -46,6 +46,13 @@ function UserProfile() {
     fetchData();
   }, [userId]);
 
+  useEffect(() => {
+    document.body.classList.add('user-profile-page');
+    return () => {
+      document.body.classList.remove('user-profile-page');
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
     navigate('/login');
@@ -64,7 +71,7 @@ function UserProfile() {
       {
         label: 'Hours Slept',
         data: sleepData.map((e) => e.hours),
-        backgroundColor: '#04AA6D',
+        backgroundColor: '#D99DA1',
       },
     ],
   };
@@ -72,13 +79,51 @@ function UserProfile() {
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: { display: false },
-      title: { display: true, text: 'Sleep Hours by Date' }
+      legend: { 
+        display: false,
+        labels: {
+          font: {
+            family: 'DM Sans'
+          }
+        }
+      },
+      title: { 
+        display: true, 
+        text: 'Sleep Hours by Date',
+        font: {
+          family: 'DM Sans',
+          size: 16
+        }
+      }
     },
     scales: {
-      x: { title: { display: true, text: 'Date' } },
+      x: { 
+        title: { 
+          display: true, 
+          text: 'Date',
+          font: {
+            family: 'DM Sans'
+          }
+        },
+        ticks: {
+          font: {
+            family: 'DM Sans'
+          }
+        }
+      },
       y: {
-        title: { display: true, text: 'Hours Slept' },
+        title: { 
+          display: true, 
+          text: 'Hours Slept',
+          font: {
+            family: 'DM Sans'
+          }
+        },
+        ticks: {
+          font: {
+            family: 'DM Sans'
+          }
+        },
         beginAtZero: true,
         max: 24
       }
@@ -90,38 +135,54 @@ function UserProfile() {
       <div className="topnav">
         <div className="nav-logo-container">
           <Link to="/feed">
-            <img src="/Nav-Logo-Profile.svg" alt="Nav Logo" className="nav-logo" />
+            <img src="/Nav-Logo-Others.svg" alt="Nav Logo" className="nav-logo" />
           </Link>
         </div>
         <div className="nav-links">
+          <Link to="/feed">Feed</Link>
           <Link to="/leaderboard">Leaderboards</Link>
-        </div>
-        <div className="right-link">
           <Link to="/home">Profile</Link>
           <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>
       </div>
 
       <div className="back-button-wrapper">
-        <button className="back-button" onClick={() => navigate('/feed')}>← Back to Feed</button>
+        <profile-back-button className="profile-back-button" onClick={() => navigate('/feed')}>← Back to Feed</profile-back-button>
       </div>
 
       <div className="profile-page">
+        <img
+          src="/Avatar-Pink.svg"
+          alt="User Star"
+          className="home-user-star"
+        />
         <h2>{userInfo?.name || 'User Profile'}</h2>
 
-        <div className="chart-wrapper">
+        <div className="user-profile-chart-description">🛌 Weekly Sleep Summary</div>
+        <div className="card user-profile-chart-card">
           <Bar data={chartData} options={chartOptions} />
         </div>
 
-        <h3>Dream Logs</h3>
+        <div className="user-profile-chart-description">💭 Dream Archive</div>
         {userDreams.length > 0 ? (
-          userDreams.map((d, i) => (
-            <div key={i} className="dream-entry">
-              <strong>{d.date}</strong>
-              {d.hours != null && <p><em>{d.hours} hours of sleep.</em></p>}
-              <p>{d.content}</p>
-            </div>
-          ))
+          <div className="dreams-feed">
+            {userDreams.map((d, i) => (
+              <div key={i} className="home-dream-entry">
+                <div className="dream-header">
+                  <strong>
+                    {d?.date ? new Date(d.date).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric'
+                    }) : 'No date'}
+                  </strong>
+                  {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
+                </div>
+                <p>{d?.content || 'No content'}</p>
+              </div>
+            ))}
+          </div>
         ) : (
           <p>No public dreams logged by this user.</p>
         )}

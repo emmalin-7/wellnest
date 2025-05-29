@@ -1,22 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  overflow-y: auto; 
+}
+
+body.user-profile-page {
+  background-color: #fcf2f2;
+  color: #ffffff;
+}
+
 .profile-page {
   max-width: 800px;
-  margin: 40px auto;
+  margin: -30px auto 20px auto;
   padding: 0 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile-page h2 {
   text-align: center;
   margin-bottom: 4px;
+  font-family: "Cooper Lt BT", serif;
+  font-size: 40px;
+  font-weight: 400;
 }
 
 .profile-page p {
-  text-align: center;
+  text-align: left;
   margin-top: 0;
   color: #666;
+}
+
+.profile-page .home-user-star {
+  margin-bottom: 20px;
+  margin-top: 0;
 }
 
 .chart-wrapper {
@@ -25,6 +51,28 @@
   border-radius: 12px;
   background-color: #fafafa;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  height: auto;
+}
+
+.user-profile-chart-card {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  min-height: 300px;
+}
+
+.user-profile-chart-card canvas {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 300px;
 }
 
 .dream-entry {
@@ -57,23 +105,173 @@
   padding-bottom: 6px;
   margin-top: 30px;
   color: #04AA6D;
+  font-family: "Cooper Lt BT", serif;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.user-profile-chart-description {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 40px;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+  padding-left: 20px;
 }
 
 .back-button-wrapper {
-  margin: 1rem 2rem;
+  margin: 30px 0 10px 0;
+  width: 100%;
+  max-width: 800px;
+  padding-left: 35px;
 }
 
-.back-button {
-  background-color: #04AA6D;
-  color: white;
+.profile-back-button {
+  background-color: #DD9D9E;
+  position: relative;
+  width: 150px;
+  color: rgb(0, 0, 0);
   border: none;
-  padding: 10px 16px;
-  font-size: 14px;
+  padding: 10px 20px;
+  font-size: 16px;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
+  font-family: "Cooper Lt BT", serif;
 }
 
-.back-button:hover {
-  background-color: #038e5d;
+.profile-back-button:hover {
+  background-color: #c88a8b;
+}
+
+.topnav {
+  overflow: hidden;
+  padding: 0.7rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Cooper Lt BT", serif;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.nav-logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  width: 140px;
+  height: 60px;
+  margin-right: 4px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a,
+.logout-link {
+  color: #000000;
+  text-decoration: none;
+  font-family: "Cooper Lt BT", serif;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-links a:hover,
+.logout-link:hover {
+  color: #575757;
+  background-color: transparent;
+}
+
+.nav-links a.active {
+  color: #000000;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+.dreams-feed {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-dream-entry {
+  background: #ffffff;
+  padding: 40px 40px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.home-dream-entry strong {
+  color: #000;
+  font-family: "Cooper Lt BT";
+  font-size: 24px !important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.home-dream-entry .dream-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+}
+
+.home-dream-entry p {
+  color: #444;
+  font-family: "DM Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+}
+
+.home-dream-entry p em {
+  color: #6c6c6c;
+  font-family: "DM Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+  display: block;
+  text-align: left;
+}
+
+.empty-feed {
+  text-align: center;
+  font-style: italic;
+  color: #777;
 }

@@ -302,7 +302,7 @@ function Home() {
         <div className="dashboard-container">
           <div className="dashboard-content">
             <h2 className="chart-description">🛌 Your Weekly Sleep Summary</h2>
-            <div className="card chart-card">
+            <div className="card home-chart-card">
               <Bar data={chartData} options={chartOptions} />
             </div>
 
@@ -419,7 +419,7 @@ function Home() {
                     onKeyDown={(e) => e.key === 'Enter' && fetchDreams()}
                   />
                 )}
-                <button onClick={fetchDreams} className="search-button">Search</button>
+                <button onClick={fetchDreams} className="home-search-button">Search</button>
               </div>
             </div>
 

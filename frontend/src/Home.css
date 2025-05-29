@@ -132,7 +132,7 @@ body.home-page {
   color: #2c3e50;
 }
 
-.chart-card {
+.home-chart-card {
   margin: 10px auto;
   padding: 20px;
   border-radius: 12px;
@@ -144,6 +144,12 @@ body.home-page {
   justify-content: center;
   align-items: center;
   height: 300px;
+}
+
+.home-chart-card canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 360px;
 }
 
 .chart-description {
@@ -159,12 +165,6 @@ body.home-page {
   width: 100%;
   max-width: 800px;
   padding-left: 20px;
-}
-
-.chart-card canvas {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 360px;
 }
 
 .dreams-card {
@@ -685,4 +685,29 @@ button:hover {
 
 .delete-popup-buttons button.cancel:hover {
   background: #e5e5e5;
+}
+
+.search-bar .home-search-button {
+  background: #C1BBD8;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-family: "Cooper Lt BT";
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  height: 36px;
+  box-sizing: border-box;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.search-bar .home-search-button:hover {
+  background: #a8a2c0;
 }
