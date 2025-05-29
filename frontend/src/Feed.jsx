@@ -104,14 +104,15 @@ function Feed() {
   }
 
   return (
-    <>
+    <div className="feed-page">
       {/* nav bar */}
       <div className="topnav">
-        <div className="left-links">
-          <Link to="/feed">Feed</Link>
-          <Link to="/leaderboard">Leaderboards</Link>
+        <div className="nav-logo-container">
+          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
         </div>
-        <div className="right-link">
+        <div className="nav-links">
+          <Link to="/feed" className="feed-link">Feed</Link>
+          <Link to="/leaderboard">Leaderboards</Link>
           <Link to="/home">Profile</Link>
           <span className="logout-link" onClick={handleLogout}>
             Log out
@@ -193,7 +194,13 @@ function Feed() {
                     )}
                   </div>
                 </div>
-                <span className="post-date">{dream.date?.split('-').join('/')}</span>
+                <span className="post-date">
+                  {dream.date ? new Date(dream.date).toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                  }) : ''}
+                </span>
               </div>
               <p className="dream-content">{dream.content}</p>
               <div className="like-section">
@@ -263,7 +270,7 @@ function Feed() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

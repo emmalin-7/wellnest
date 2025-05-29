@@ -180,11 +180,12 @@ function Home() {
   return (
     <>
       <div className="topnav">
-        <div className="left-links">
+        <div className="nav-logo-container">
+          <img src="/Nav-Logo.svg" alt="Nav Logo" className="nav-logo" />
+        </div>
+        <div className="nav-links">
           <Link to="/feed">Feed</Link>
           <Link to="/leaderboard">Leaderboards</Link>
-        </div>
-        <div className="right-link">
           <Link to="/home">Profile</Link>
           <span className="logout-link" onClick={handleLogout}>Log out</span>
         </div>
@@ -208,7 +209,7 @@ function Home() {
           <div className="card dreams-card combined-dream-card">
             <div className="card-title">Today's Sleep Log: </div>
             {hasPostedToday && (
-              <p className="info-text">You’ve already posted your dream today!</p>
+              <p className="info-text">You've already posted your dream today!</p>
             )}
             <input
               type="number"

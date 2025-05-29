@@ -1,36 +1,52 @@
 .topnav {
-  background-color: #333;
+  overflow: hidden;
+  padding: 0.7rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  height: 60px;
+  width: 100vw;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Cooper Lt BT", serif;
+  box-sizing: border-box;
 }
 
-.left-links,
-.right-link {
+.nav-logo-container {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.topnav a,
+.nav-logo {
+  width: 140px;
+  height: 60px;
+  margin-right: 4px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a,
 .logout-link {
-  color: white;
+  color: #000000;
   text-decoration: none;
-  padding: 16px;
-  font-size: 17px;
+  font-family: "Cooper Lt BT", serif;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
   cursor: pointer;
 }
 
-.topnav a:hover,
+.nav-links a:hover,
 .logout-link:hover {
-  background-color: #575757;
+  color: #575757;
+  background-color: transparent;
 }
 
-.topnav a.active {
-  background-color: #6ac5fe;
-  color: white;
+.nav-links a.active {
+  color: #000000;
+  background-color: transparent;
+  font-weight: bold;
 }
 
 html, body {
