@@ -79,7 +79,14 @@ app.post('/register', (req, res) => {
 // logging dream routes
 app.post('/api/dreams', async (req, res) => {
   try {
-    const { date, content, user, isPublic, hours } = req.body;
+    const { content, user, isPublic, hours } = req.body;
+
+    const pstNow = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const dateOnly = new Date(pstNow);
+    const yyyy = dateOnly.getFullYear();
+    const mm = String(dateOnly.getMonth() + 1).padStart(2, '0');
+    const dd = String(dateOnly.getDate()).padStart(2, '0');
+    const date = `${yyyy}-${mm}-${dd}`;
 
     if (!user) return res.status(400).json({ error: 'missing user' });
 
@@ -95,8 +102,15 @@ app.post('/api/dreams', async (req, res) => {
       return res.status(400).json({ error: 'You already posted a dream for today.' });
     }
 
+    const pst = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const pstDate = new Date(pst);
+    const year = pstDate.getFullYear();
+    const month = String(pstDate.getMonth() + 1).padStart(2, '0');
+    const day = String(pstDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
     const newDream = new DreamEntry({
-      date,
+      date: formattedDate,
       content,
       user: userId,
       isPublic: !!isPublic,
@@ -333,7 +347,7 @@ app.delete('/api/dreams/:id', async (req, res) => {
 
 app.get('/api/users/:userId', async (req, res) => {
   try {
-    const user = await UserModel.findById(req.params.userId).select('name email');
+    const user = await UserModel.findById(req.params.userId).select('name email starColor');
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
   } catch (err) {

@@ -15,6 +15,15 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+function getTodayPSTDate() {
+  const now = new Date();
+  const pst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  const year = pst.getFullYear();
+  const month = String(pst.getMonth() + 1).padStart(2, '0');
+  const day = String(pst.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function Home() {
   const [sleepHours, setSleepHours] = useState('');
   const [sleepData, setSleepData] = useState([]);
@@ -28,14 +37,8 @@ function Home() {
 
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user?.id;
-  const today = new Date().toLocaleString('en-US', {
-    timeZone: 'America/Los_Angeles',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).split(',')[0].split('/').reverse().join('-');
+  const today = getTodayPSTDate();
   const [isPublic, setIsPublic] = useState(false);
-
   const [hasPostedToday, setHasPostedToday] = useState(false);
 
   const navigate = useNavigate();
@@ -62,8 +65,7 @@ function Home() {
     }
 
     try {
-      const res = await axios.post('/api/dreams', {
-        date: today,
+      await axios.post('/api/dreams', {
         content: dreamText,
         user: userId,
         isPublic,
@@ -72,10 +74,9 @@ function Home() {
 
       setDreamText('');
       setSleepHours('');
-      fetchDreams();
-      fetchSleepData();
+      await fetchDreams();
+      await fetchSleepData();
       setHasPostedToday(true);
-      localStorage.setItem('lastPostedDate', today);
     } catch (err) {
       console.error('Failed to post dream:', err);
     }
@@ -86,17 +87,18 @@ function Home() {
       const res = await axios.get('/api/dreams', {
         params: { user: userId }
       });
+      // valid hour entries
 
-      // Filter for valid hour entries
       const filtered = res.data.filter(d => typeof d.hours === 'number');
-
-      // Sort by date descending (newest first)
+      
+      // descending dates
       const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
 
-      // Take the 7 most recent entries
+      // 7 most recent 
       const recent = sorted.slice(0, 7);
-
-      // Reverse again so that oldest is on the left, newest on right
+      
+      // reverse again 
       setSleepData(recent.reverse());
     } catch (err) {
       console.error('Failed to fetch sleep data from dreams:', err);
@@ -115,18 +117,11 @@ function Home() {
       if (searchMode === 'date' && searchTerm.trim()) {
         params.date = searchTerm;
       }
-
-
       const res = await axios.get('/api/dreams', { params });
       setDreams(res.data);
 
-      const todayStr = new Date().toLocaleString('en-US', {
-        timeZone: 'America/Los_Angeles',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }).split(',')[0].split('/').reverse().join('-');
-      const hasPosted = res.data.some(d => d.date === todayStr);
+      const todayPST = getTodayPSTDate();
+      const hasPosted = res.data.some(d => d.date === todayPST);
       setHasPostedToday(hasPosted);
     } catch (err) {
       console.error('Failed to get dreams:', err);
@@ -173,23 +168,6 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const checkDate = () => {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const lastPostedDate = localStorage.getItem('lastPostedDate');
-      
-      if (lastPostedDate !== todayStr) {
-        setHasPostedToday(false);
-        localStorage.setItem('lastPostedDate', todayStr);
-      }
-    };
-
-    checkDate();
-    const intervalId = setInterval(checkDate, 60000);
-    
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
     document.body.classList.add('home-page');
     return () => {
       document.body.classList.remove('home-page');
@@ -198,9 +176,8 @@ function Home() {
 
   const chartData = {
     labels: sleepData.map((e) => {
-      const [year, month, day] = e.date.split('-');
-      const localDate = new Date(Number(year), Number(month) - 1, Number(day));
-      return localDate.toLocaleDateString('en-US', {
+      const pstDate = new Date(`${e.date}T12:00:00-08:00`);
+      return pstDate.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
       });
@@ -218,50 +195,43 @@ function Home() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { 
-        display: false,
-        labels: {
-          font: {
-            family: 'DM Sans'
-          }
-        }
-      },
-      title: { 
-        display: true, 
+      legend: { display: false },
+      title: {
+        display: true,
         text: 'Sleep Hours by Date',
-        font: {
-          family: 'DM Sans',
-          size: 16
-        }
-      }
+        font: { 
+          family: 'DM Sans', 
+          size: 16 
+        },
+      },
     },
     scales: {
-      x: { 
+      x: {
         title: { 
           display: true, 
-          text: 'Date',
-          font: {
-            family: 'DM Sans'
-          }
+          text: 'Date', 
+          font: { 
+            family: 'DM Sans' 
+          } 
         },
-        ticks: {
-          font: {
-            family: 'DM Sans'
-          }
+        ticks: { 
+          font: { 
+            family: 'DM Sans' 
+          } 
         }
       },
       y: {
         title: { 
           display: true, 
-          text: 'Hours Slept',
-          font: {
-            family: 'DM Sans'
-          }
+          text: 'Hours Slept', 
+          font: { 
+            family: 'DM Sans' 
+          } 
         },
-        ticks: {
-          font: {
-            family: 'DM Sans'
-          }
+        ticks: { 
+          font: { 
+            family: 'DM Sans' 
+          } 
         },
         beginAtZero: true,
         max: 24
@@ -351,6 +321,7 @@ function Home() {
                     />
                     Share to Feed
                   </label>
+                  {/* if this doesn't work, change this back to button*/}
                   <sleep-log-button 
                     onClick={submitDream} 
                     disabled={hasPostedToday}
@@ -439,14 +410,13 @@ function Home() {
                   <div key={i} className="home-dream-entry">
                     <div className="dream-header">
                       <strong>
-                        {d?.created
-                          ? new Date(d.created).toLocaleDateString('en-US', {
-                            timeZone: 'America/Los_Angeles',
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })
+                        {d?.date
+                          ? new Date(`${d.date}T12:00:00-08:00`).toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              month: 'long',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })
                           : 'No date'}
                       </strong>
                       {d?.hours != null && <p><em>{d.hours} hours of sleep</em></p>}
