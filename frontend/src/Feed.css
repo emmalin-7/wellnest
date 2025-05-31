@@ -19,7 +19,7 @@ body.feed-body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 20%, #EAF3FF 50%, #E4F0FF 100%);
+  background: linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 20%, #eff7ff 50%, #dce4ff 100%);
 }
 
 .feed-page {
