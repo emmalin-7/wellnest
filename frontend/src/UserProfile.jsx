@@ -33,27 +33,43 @@ function UserProfile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
         try {
-            const dreamsRes = await axios.get('/api/dreams', {
-            params: { user: userId, isPublic: true }
+            const allDreamsRes = await axios.get('/api/dreams', {
+                params: { user: userId }
             });
-            const validDreams = dreamsRes.data.filter(d => typeof d.hours === 'number');
+            const allDreams = allDreamsRes.data.filter(d => typeof d.hours === 'number');
 
-            const sorted = validDreams.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const recent = sorted.slice(0, 7).reverse();
-            setSleepData(recent);
-            setUserDreams(dreamsRes.data);
+            const today = new Date();
+            const startDate = new Date();
+            startDate.setDate(today.getDate() - 6);
+
+            const fullWeekDates = [...Array(7)].map((_, i) => {
+                const d = new Date(startDate);
+                d.setDate(startDate.getDate() + i);
+                return d.toISOString().slice(0, 10);
+            });
+
+            const dataMap = Object.fromEntries(
+                allDreams.map(d => [d.date, { date: d.date, hours: d.hours }])
+            );
+
+            const filledSleep = fullWeekDates.map(date => dataMap[date] || { date, hours: 0 });
+            setSleepData(filledSleep);
+
+            const publicDreamsRes = await axios.get('/api/dreams', {
+                params: { user: userId, isPublic: true }
+            });
+            setUserDreams(publicDreamsRes.data);
 
             const userRes = await axios.get(`/api/users/${userId}`);
-            console.log("Fetched user info:", userRes.data);
             setUserInfo(userRes.data);
         } catch (err) {
             console.error('Failed to load user profile:', err);
         }
-        };
+    };
 
-        fetchData();
+    fetchData();
     }, [userId]);
 
     useEffect(() => {

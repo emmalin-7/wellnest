@@ -83,27 +83,33 @@ function Home() {
   };
 
   const fetchSleepData = async () => {
-    try {
-      const res = await axios.get('/api/dreams', {
-        params: { user: userId }
-      });
-      // valid hour entries
+  try {
+    const res = await axios.get('/api/dreams', {
+      params: { user: userId }
+    });
+    const filtered = res.data.filter(d => typeof d.hours === 'number');
 
-      const filtered = res.data.filter(d => typeof d.hours === 'number');
-      
-      // descending dates
-      const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-      
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - 6);
 
-      // 7 most recent 
-      const recent = sorted.slice(0, 7);
-      
-      // reverse again 
-      setSleepData(recent.reverse());
-    } catch (err) {
-      console.error('Failed to fetch sleep data from dreams:', err);
-    }
-  };
+    const fullWeekDates = [...Array(7)].map((_, i) => {
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() + i);
+      return d.toISOString().slice(0, 10); 
+    });
+
+    const dataMap = Object.fromEntries(
+      filtered.map(d => [d.date, { date: d.date, hours: d.hours }])
+    );
+
+    const filled = fullWeekDates.map(date => dataMap[date] || { date, hours: 0 });
+
+    setSleepData(filled);
+  } catch (err) {
+    console.error('Failed to fetch sleep data from dreams:', err);
+  }
+};
 
   const fetchDreams = async () => {
     try {
