@@ -274,7 +274,7 @@ function Home() {
             })}
           </div>
           <h1 className="welcome-title">
-            ✨ Welcome back, <span className="home-user-name">{user?.name || 'User'}</span>
+            ✨ Welcome, <span className="home-user-name">{user?.name || 'User'}</span>
           </h1>
           <p className="check-in-message">Let's check in on your sleep and dreams.</p>
         </div>
