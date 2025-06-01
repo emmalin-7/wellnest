@@ -197,6 +197,9 @@ function Home() {
     ],
   };
 
+  const maxHours = Math.max(...sleepData.map(e => e.hours), 0);
+  const dynamicMax = Math.ceil(maxHours + 1);
+
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -240,7 +243,7 @@ function Home() {
           } 
         },
         beginAtZero: true,
-        max: 24
+        max: dynamicMax > 0 ? dynamicMax : 24
       }
     }
   };

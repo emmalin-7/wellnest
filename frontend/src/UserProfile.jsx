@@ -102,59 +102,64 @@ function UserProfile() {
         ],
     };
 
+
+    const maxHours = Math.max(...sleepData.map(e => e.hours), 0);
+    const dynamicMax = Math.ceil(maxHours + 1);
+
     const chartOptions = {
         responsive: true,
         plugins: {
-        legend: { 
-            display: false,
-            labels: {
-            font: {
-                family: 'DM Sans'
+            legend: {
+                display: false,
+                labels: {
+                    font: {
+                        family: 'DM Sans'
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Sleep Hours by Date',
+                font: {
+                    family: 'DM Sans',
+                    size: 16
+                }
             }
-            }
-        },
-        title: { 
-            display: true, 
-            text: 'Sleep Hours by Date',
-            font: {
-            family: 'DM Sans',
-            size: 16
-            }
-        }
         },
         scales: {
-        x: { 
-            title: { 
-            display: true, 
-            text: 'Date',
-            font: {
-                family: 'DM Sans'
-            }
+            x: {
+                title: {
+                    display: true,
+                    text: 'Date',
+                    font: {
+                        family: 'DM Sans'
+                    }
+                },
+                ticks: {
+                    font: {
+                        family: 'DM Sans'
+                    }
+                }
             },
-            ticks: {
-            font: {
-                family: 'DM Sans'
+            y: {
+                title: {
+                    display: true,
+                    text: 'Hours Slept',
+                    font: {
+                        family: 'DM Sans'
+                    }
+                },
+                ticks: {
+                    font: {
+                        family: 'DM Sans'
+                    }
+                },
+                beginAtZero: true,
+                max: dynamicMax > 0 ? dynamicMax : 24
             }
-            }
-        },
-        y: {
-            title: { 
-            display: true, 
-            text: 'Hours Slept',
-            font: {
-                family: 'DM Sans'
-            }
-            },
-            ticks: {
-            font: {
-                family: 'DM Sans'
-            }
-            },
-            beginAtZero: true,
-            max: 24
-        }
         }
     };
+
 
     return (
         <>
