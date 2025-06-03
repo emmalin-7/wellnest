@@ -1,7 +1,6 @@
 # wellnest
 _Track Your Sleep and Dreams with Friends_
 
-## welcome to our app!
 We created Wellnest, a sleep and dream tracker built with college students in mind. It's designed to help users track sleep, log dreams, and most importantly, build healthy habits with the help of a community.
 
 # how to run the app locally
@@ -10,7 +9,7 @@ We created Wellnest, a sleep and dream tracker built with college students in mi
 - ppen the project in Visual Studio Code (or your preferred code editor).
 
 ## 2. terminal #1 – run the backend
-<pre>```# make sure you are using Node.js version 22
+<pre># make sure you are using Node.js version 22
 nvm use 22
 
 # install root dependencies 
@@ -24,11 +23,10 @@ npm install
 
 # start the backend server
 npm run dev
-```
 </pre>
 
 ## 3. terminal #2 – run the frontend
-<pre> ```
+<pre>
 # navigate to frontend folder
 cd frontend
 
@@ -37,7 +35,6 @@ npm install
 
 # start the frontend server
 npm run dev
-```
 </pre>
 
 # using the app
