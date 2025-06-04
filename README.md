@@ -6,7 +6,7 @@ We created Wellnest, a sleep and dream tracker built with college students in mi
 # how to run the app locally
 ## 1. download the source code
 - clone or download the code from this GitHub repository.
-- ppen the project in Visual Studio Code (or your preferred code editor).
+- open the project in Visual Studio Code (or your preferred code editor).
 
 ## 2. terminal #1 – run the backend
 <pre># make sure you are using Node.js version 22
