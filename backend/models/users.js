@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+// user info 
+// password will be stored as encrypted 
 const UserSchema = new mongoose.Schema({
   name: String,
   email: String,

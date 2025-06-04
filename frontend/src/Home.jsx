@@ -15,6 +15,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// works with unifying the data across the whole page, set to los angeles time 
 function getTodayPSTDate() {
   const now = new Date();
   const pst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
@@ -43,6 +44,7 @@ function Home() {
 
   const navigate = useNavigate();
 
+  // deals with user's logging sleep hours, only allows 0-24
   const logSleep = async (e) => {
     e.preventDefault();
     const hours = Number(sleepHours);
@@ -56,6 +58,7 @@ function Home() {
     fetchSleepData();
   };
 
+  // send data to backend and storing all the info 
   const submitDream = async (e) => {
     e.preventDefault();
     const hours = Number(sleepHours);
@@ -82,6 +85,7 @@ function Home() {
     }
   };
 
+  // accesses the data
   const fetchSleepData = async () => {
   try {
     const res = await axios.get('/api/dreams', {
@@ -110,7 +114,7 @@ function Home() {
     console.error('Failed to fetch sleep data from dreams:', err);
   }
 };
-
+  // deals with the searching thru dreams
   const fetchDreams = async () => {
     try {
       const params = { user: userId };
@@ -136,6 +140,7 @@ function Home() {
     }
   };
 
+  // allows deleting of the dream 
   const handleDelete = async (dreamId) => {
     try {
       await axios.delete(`/api/dreams/${dreamId}`, {
@@ -180,6 +185,7 @@ function Home() {
     };
   }, []);
 
+  // deals with the little bar chart of sleep hours 
   const chartData = {
     labels: sleepData.map((e) => {
       const pstDate = new Date(`${e.date}T12:00:00-08:00`);
@@ -294,7 +300,7 @@ function Home() {
             <div className="card home-chart-card">
               <Bar data={chartData} options={chartOptions} />
             </div>
-
+            <>{/* only allows users to post once a day */}</>
             <h2 className="sleep-log-title">🌙  Today's Sleep Log:</h2>
             <div className="card dreams-card combined-dream-card">
               {hasPostedToday ? (
@@ -304,6 +310,7 @@ function Home() {
                 </p>
               ) : (
                 <>
+                  <>{/* section for user input to allow data collection */}</>
                   <p className="sleep-log-subtitle">How many hours did you sleep last night?</p>
                   <input
                     type="number"
@@ -330,7 +337,7 @@ function Home() {
                     />
                     Share to Feed
                   </label>
-                  {/* if this doesn't work, change this back to button*/}
+                  {/* if this doesn't work, change this back to button */}
                   <sleep-log-button 
                     onClick={submitDream} 
                     disabled={hasPostedToday}

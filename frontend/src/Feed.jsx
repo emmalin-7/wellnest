@@ -29,6 +29,7 @@ function Feed() {
     navigate('/login');
   };
 
+  // deals with meaningful search
   const fetchPublicDreams = async () => {
     try {
       const params = { isPublic: true };
@@ -59,6 +60,9 @@ function Feed() {
     fetchPublicDreams();
   }, []);
 
+  // deals with liking post
+  // can only like once
+  // popup displays to show both actions 
   const handleLike = async (dreamId) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
@@ -79,6 +83,9 @@ function Feed() {
     }
   };
 
+  // doesn't allow empty comments 
+  // posts the comment
+  // page automatically refreshes to display the user comment under each post. 
   const handleComment = async (dreamId, e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem('user'));
@@ -106,6 +113,7 @@ function Feed() {
     }
   };
 
+  // allows deleting per user comment, only user who posted it can delete it
   const handleCommentDelete = async (dreamId, commentId) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
@@ -124,9 +132,7 @@ function Feed() {
 
   return (
     <div className="feed-page">
-      {/* Test font loading */}
-      <div className="test-font" style={{ position: 'absolute', top: 0, left: 0, opacity: 0 }}>Test Font</div>
-      
+
       {/* nav bar */}
       <div className="topnav">
         <div className="nav-logo-container">
@@ -242,6 +248,7 @@ function Feed() {
           dreams.map((dream, i) => (
             <div key={i} className="feed-dream-post">
               <div className="post-header">
+                <>{/* star avatar color should changed based on each user's previous star color choice! */}</>
                 <div className="post-user-info">
                   <img
                     src={`/Avatar-${dream.user.starColor || 'Yellow'}.svg`}
@@ -273,6 +280,7 @@ function Feed() {
                     : ''}
                 </span>
               </div>
+              <>{/* this section just makes the heart stay red after a comment is liked, empty if not liked*/}</>
               <p className="dream-content">{dream.content}</p>
               <div className="like-section">
                 <button 
@@ -310,6 +318,7 @@ function Feed() {
                 {dream.comments.map((comment, idx) => (
                   <div key={idx} className="comment">
                     <div className="comment-header">
+                      <>{/* only if the user's match, the comment will display the little trash icon next to it */}</>
                       <span className="comment-user">{comment.user?.name || 'unknown user'}</span>
                         {(comment.user === currentUserId || comment.user?._id === currentUserId) && (
                           <button

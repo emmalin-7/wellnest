@@ -13,6 +13,7 @@ import ChooseStarAvatar from './ChooseStarAvatar';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
+  // routing all the paths to the right pages for easier access in code 
   return (
     <Router>
       <Routes>

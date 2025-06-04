@@ -40,6 +40,7 @@ function Leaderboard() {
     };
   }, []);
 
+  // allow toggle between top 10 and bottom 10 sleepers
   const displayedList = view === 'top' ? top10 : bottom10;
   const title = view === 'top' ? 'Top 10 Sleepers' : 'Bottom 10 Sleepers';
 
@@ -55,7 +56,7 @@ function Leaderboard() {
       const rank = totalUsers - bottom10.length + index + 1;
       return (
         <>
-          🔻 {0 + index + 1}
+          🔻 {index + 1}
         </>
       );
     }
@@ -89,6 +90,7 @@ function Leaderboard() {
           </div>
         </div>
 
+        <>{/* nums are calculated as the average based on the last seven days, any empty entries are set automatically to 0 */}</>
         <div className="leaderboard-content">
           <h2>{title}</h2>
           {fallback && (

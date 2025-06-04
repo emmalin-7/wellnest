@@ -32,6 +32,7 @@ function UserProfile() {
     const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
 
+    // everything on this page depends on per user
     useEffect(() => {
     const fetchData = async () => {
         try {
@@ -84,6 +85,7 @@ function UserProfile() {
         navigate('/login');
     };
 
+    // all logged sleep hours per user will be displayed, no matter public or private
     const chartData = {
         labels: sleepData.map((e) => {
             const pstDate = new Date(`${e.date}T12:00:00-08:00`);
@@ -198,7 +200,6 @@ function UserProfile() {
                 </div>
 
                 <div className="user-profile-chart-description">🌙 Dream Archive</div>
-
                 {userDreams.length > 0 ? (
                 <div className="dreams-feed">
                     {userDreams.map((d, i) => (
@@ -231,7 +232,7 @@ function UserProfile() {
                 )}
             </div>
             ) : (
-            <div className="profile-page-loading">Loading user profile...</div>
+            <div className="profile-page-loading">{ /* loading user profile...*/ }</div>
             )}
         </>
     );

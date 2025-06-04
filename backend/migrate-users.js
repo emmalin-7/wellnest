@@ -5,6 +5,9 @@ import DreamEntry from './models/dreams.js';
 
 dotenv.config();
 
+// this was for when we migrated our users from the old format of storing user's to the new format
+// this is not actually used in the final view of the project
+
 await mongoose.connect(process.env.MONGO_URI);
 console.log("Connected to MongoDB");
 

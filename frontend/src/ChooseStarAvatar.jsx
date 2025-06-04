@@ -3,6 +3,7 @@ import './ChooseStarAvatar.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// colors must match pic names EXACTLY
 const colors = ['Yellow', 'Blue', 'Green', 'Pink', 'Purple'];
 
 function ChooseStarAvatar() {
@@ -15,6 +16,8 @@ function ChooseStarAvatar() {
         starColor: color
       });
 
+      // sets the stored user's starColor variable to the color they have chosen 
+      // also sets hasChosenStar true, so the user will not be able to access this page unless it's their first time 
       localStorage.setItem('user', JSON.stringify({
         ...user,
         starColor: color,

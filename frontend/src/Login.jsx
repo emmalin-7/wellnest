@@ -33,7 +33,6 @@ function Login() {
           const user = result.data.user;
 
           // store each user for local database, dream and sleep logs
-
           localStorage.setItem('user', JSON.stringify(user));
 
           if (!user.hasChosenStar) {

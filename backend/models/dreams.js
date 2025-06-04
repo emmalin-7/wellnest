@@ -4,6 +4,8 @@
 
 import mongoose from 'mongoose';
 
+
+// all info needed for our dream posting and accessing 
 const DreamSchema = new mongoose.Schema({
   date: { type: String, required: true },
   content: { type: String, required: true },

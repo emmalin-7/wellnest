@@ -57,6 +57,7 @@ app.post("/login", (req, res) => {
 });
 
 // creating users into database
+// CHECKS FOR PASSWORD REQS
 app.post('/register', (req, res) => {
   const { password } = req.body;
 
@@ -68,6 +69,7 @@ app.post('/register', (req, res) => {
     });
   }
 
+  // password encryption!!
   const salt = bcrypt.genSaltSync(10);
   req.body.password = bcrypt.hashSync(password, salt);
 
@@ -126,6 +128,7 @@ app.post('/api/dreams', async (req, res) => {
   }
 });
 
+// dealing with post liking 
 app.post('/api/dreams/:dreamId/like', async (req, res) => {
   const dreamId = req.params.dreamId;
   const { user } = req.body;
@@ -146,6 +149,7 @@ app.post('/api/dreams/:dreamId/like', async (req, res) => {
   res.sendStatus(200);
 });
 
+// dealing with comment posts
 app.post('/api/dreams/:dreamId/comment', async (req, res) => {
   const dreamId = req.params.dreamId;
   const { user, content } = req.body;
@@ -213,6 +217,7 @@ app.get('/api/dreams', async (req, res) => {
     const { user, search, isPublic, hours, userSearch, date } = req.query;
 
     const filter = {};
+
     if (user) filter.user = user;
     if (isPublic === 'true') filter.isPublic = true;
     if (search) filter.content = { $regex: new RegExp(search, 'i') };
@@ -226,7 +231,7 @@ app.get('/api/dreams', async (req, res) => {
 
     let dreams = await dreamsQuery.exec();
 
-    // Post-query filtering by user name
+    // post-query filtering by user name
     if (userSearch) {
       const regex = new RegExp(userSearch, 'i');
       dreams = dreams.filter(d => d.user?.name?.match(regex));
@@ -252,7 +257,7 @@ app.get('/api/leaderboard', async (req, res) => {
       hours: { $gt: 0 }
     });
     if (recentCount >= 10) {
-      // Use 7-day average logic
+      // 7 day avg, with missing days be 0
       const dates = [...Array(7)].map((_, i) => {
         const d = new Date(today);
         d.setDate(today.getDate() - i);
@@ -276,6 +281,7 @@ app.get('/api/leaderboard', async (req, res) => {
         }
       }
 
+      // calculate the user averages for the leaderboard rankings
       const userAvgs = Object.entries(userMap)
       .filter(([_, { daily }]) => Object.keys(daily).length > 0)
       .map(([id, { name, daily }]) => {
@@ -307,7 +313,7 @@ app.get('/api/leaderboard', async (req, res) => {
         { $sort: { totalHours: -1 } }
       ]);
 
-    // Populate user names
+    // populate user names
     const populated = await UserModel.populate(leaderboardData, { path: '_id', select: 'name' });
 
     const top10 = populated.slice(0, 10);
@@ -326,7 +332,9 @@ app.get('/api/leaderboard', async (req, res) => {
 app.delete('/api/dreams/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.query.user; // for safety, we confirm ownership
+
+    // for safety, we confirm ownership
+    const userId = req.query.user; 
 
     const dream = await DreamEntry.findById(id);
     if (!dream) return res.status(404).json({ error: 'Dream not found' });

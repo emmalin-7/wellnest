@@ -12,6 +12,7 @@ function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // password requirements
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$/;
 
     if (!passwordRegex.test(password)) {
